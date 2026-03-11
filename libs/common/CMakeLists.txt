@@ -4,5 +4,10 @@ target_sources(Mathpp
     BASE_DIRS ${CMAKE_CURRENT_LIST_DIR}/..
     FILES  
       modules/check.cppm
-common.cppm
+      common.cppm
+)
+
+target_include_directories(Mathpp
+  PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}/include
 )

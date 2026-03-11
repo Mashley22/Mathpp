@@ -10,8 +10,14 @@ elseif(CMAKE_CXX_STANDARD LESS ${MINIMUM_CXX_STANDARD})
   message(FATAL_ERROR "c++ standard set too low: ${CMAKE_CXX_STANDARD}. Need ${MINIMUM_CXX_STANDARD} atleast!")
 endif()
 
+add_library(Mathpp)
+
 if(MATHPP_UNIT_TEST)
   add_compile_definitions(MATHPP_UNIT_TEST)
+  target_compile_options(Mathpp
+    PRIVATE 
+      ${PEDANTIC_COMPILE_OPTIONS}
+  )
 endif()
 
 set(PEDANTIC_COMPILE_OPTIONS
@@ -36,8 +42,6 @@ set(PEDANTIC_COMPILE_OPTIONS
   -Wunreachable-code
 )
 
-add_library(Mathpp)
-
 add_subdirectory(libs)
 
 if(MATHPP_UNIT_TEST)
@@ -49,5 +53,4 @@ if(MATHPP_UNIT_TEST)
   include(Catch)
 
   add_subdirectory(validation)
-
 endif()

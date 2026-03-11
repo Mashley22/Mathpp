@@ -1,8 +1,7 @@
-#ifdef MATHPP_MACROS_HPP
+#ifndef MATHPP_MACROS_HPP
 #define MATHPP_MACROS_HPP
 
-namespace mathpp {
-
-}
+#define MATHPP_CHECK(expr) \
+  mathpp::check(expr)
 
 #endif /* MATHPP_MACROS_HPP */
