@@ -4,6 +4,7 @@ target_sources(Mathpp
     BASE_DIRS ${CMAKE_CURRENT_LIST_DIR}/..
     FILES  
       modules/check.cppm
+      modules/traits.cppm
       common.cppm
 )
 
