@@ -92,6 +92,9 @@ struct Subtractible_t {
 };
 
 struct Additive_t {
+  Additive_t() {}
+  Additive_t(double) {}
+
   Additive_t operator-(const Additive_t& other) {
     return other;
   }
@@ -203,6 +206,9 @@ struct SelfDivisible_t {
 };
 
 struct Multiplicative_t {
+  Multiplicative_t() {}
+  Multiplicative_t(int) {}
+
   bool operator==(const Multiplicative_t& other) const = default;
 
   Multiplicative_t operator/(const Multiplicative_t& other) { return other; }
@@ -251,6 +257,9 @@ TEST_CASE( "Multiplicative with custom types!", "[common][traits]" ) {
 namespace {
 
 struct Scalar_t {
+  
+  Scalar_t() = default;
+  Scalar_t(unsigned int) {}
 
   bool operator==(const Scalar_t& other) const = default;
   bool operator<=(const Scalar_t& other) const { (void)other; return true; } 

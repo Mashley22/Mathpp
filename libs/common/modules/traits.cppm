@@ -6,6 +6,25 @@ module;
 
 export module Mathpp.common:traits;
 
+namespace mathpp {
+
+namespace {
+
+template<class T>
+concept HasAdditiveIdentity = requires {
+  { T(0) } -> std::same_as<T>;
+};
+
+template<class T>
+concept HasMultiplicativeIdentity = requires {
+  { T(1) } -> std::same_as<T>;
+};
+
+}
+
+}
+
+
 export namespace mathpp {
 
 template<class T>
@@ -31,7 +50,8 @@ requires(T a) {
 template<class T>
 concept Additive = Addible<T> &&
 Subtractible<T> &&
-Negatable<T>;
+Negatable<T> &&
+HasAdditiveIdentity<T>;
 
 template<class T, class T_other>
 concept MultipliableBy = std::regular<T> &&
@@ -62,7 +82,8 @@ concept DivisibleByAll = (DivisibleBy<T, T_others> && ...);
 
 template<class T>
 concept Multiplicative = SelfMultipliable<T> &&
-SelfDivisible<T>;
+SelfDivisible<T> &&
+HasMultiplicativeIdentity<T>;
 
 template<class T>
 concept Scalar = Additive<T> &&
