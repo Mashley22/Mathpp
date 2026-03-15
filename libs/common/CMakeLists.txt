@@ -5,6 +5,8 @@ target_sources(Mathpp
     FILES  
       modules/check.cppm
       modules/traits.cppm
+      modules/abs.cppm
+      modules/compare.cppm
       common.cppm
 )
 
