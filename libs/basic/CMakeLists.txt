@@ -4,4 +4,5 @@ target_sources(Mathpp
     FILES  
       basic.cppm
       modules/factorial.cppm
+      modules/pow.cppm
 )
