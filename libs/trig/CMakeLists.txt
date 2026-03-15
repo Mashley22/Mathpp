@@ -1,10 +1,6 @@
-add_subdirectory(common)
-add_subdirectory(basic)
-add_subdirectory(trig)
-
 target_sources(Mathpp
   PUBLIC
     FILE_SET public_cxx_modules TYPE CXX_MODULES
     FILES  
-    mathpp.cppm
+      trig.cppm
 )
