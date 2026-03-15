@@ -22,7 +22,7 @@
 #endif
 
 #ifndef _MSCV_VER
-#define MATHPP_PURE_FUNC __atribute__((pure))
+#define MATHPP_PURE_FUNC __attribute__((pure))
 #define MATHPP_CONST_FUNC __attribute__((const))
 #else 
 #define MATHPP_PURE_FUNC
