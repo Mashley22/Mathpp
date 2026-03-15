@@ -18,3 +18,4 @@ function(add_unit_test TEST_NAME)
 endfunction()
 
 add_subdirectory(common)
+add_subdirectory(basic)
