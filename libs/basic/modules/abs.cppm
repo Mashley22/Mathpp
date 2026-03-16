@@ -4,9 +4,9 @@ module;
 
 #include <Mathpp/macros.hpp>
 
-export module Mathpp.common:abs;
+export module Mathpp.basic:abs;
 
-import :traits;
+import Mathpp.common;
 
 export namespace mathpp {
 

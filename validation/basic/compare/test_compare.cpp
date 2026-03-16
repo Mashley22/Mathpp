@@ -3,6 +3,7 @@
 #include <Mathpp/macros.hpp>
 
 import Mathpp.common;
+import Mathpp.basic;
 
 namespace mathpp {
 

@@ -4,10 +4,9 @@ module;
 
 #include <Mathpp/macros.hpp>
 
-export module Mathpp.common:compare;
+export module Mathpp.basic:compare;
 
-import :check;
-import :traits;
+import Mathpp.common;
 import :abs;
 
 export namespace mathpp {

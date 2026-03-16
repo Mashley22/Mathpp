@@ -5,6 +5,7 @@
 #include <Mathpp/macros.hpp>
 
 import Mathpp.common;
+import Mathpp.basic;
 
 // two's complement correction here
 #define testAbsLimitValsInt(T) \

@@ -5,4 +5,6 @@ target_sources(Mathpp
       basic.cppm
       modules/factorial.cppm
       modules/pow.cppm
+      modules/abs.cppm
+      modules/compare.cppm
 )
