@@ -1,4 +1,5 @@
 #include <numeric>
+#include <type_traits>
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -10,7 +11,9 @@ import Mathpp.basic;
 // two's complement correction here
 #define testAbsLimitValsInt(T) \
   std::numeric_limits<T>::max() == abs(std::numeric_limits<T>::max()) && \
-  std::numeric_limits<T>::max() == abs(std::numeric_limits<T>::min() + 1) 
+  std::numeric_limits<T>::max() == abs(std::numeric_limits<T>::min() + 1) && \
+  static_cast<std::make_unsigned_t<T>>(std::numeric_limits<T>::min()) == \
+  abs<T, std::make_unsigned_t<T>>(std::numeric_limits<T>::min())
 
 #define testAbsLimitValsFloat(T) \
   std::numeric_limits<T>::max() == abs(std::numeric_limits<T>::max()) && \
