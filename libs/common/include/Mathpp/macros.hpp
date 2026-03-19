@@ -16,9 +16,11 @@
   MATHPP_ALL_ARITHMETIC_TYPES
 
 #ifndef MATHPP_UNIT_TEST
-#define MATHPP_NOEXCEPT(...) noexcept(...)
+#define MATHPP_NOEXCEPT noexcept
+#define MATHPP_NOEXCEPT_COND(...) noexcept(__VA_ARGS__)
 #else
-#define MATHPP_NOEXCEPT(...)
+#define MATHPP_NOEXCEPT
+#define MATHPP_NOEXCEPT_COND(...)
 #endif
 
 #ifndef _MSCV_VER
