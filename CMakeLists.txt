@@ -12,12 +12,40 @@ endif()
 
 add_library(Mathpp)
 
+option(MATHPP_UNIT_TEST "build the unit tests" OFF)
+option(MATHPP_PERF_VAL "build the performance validations" OFF) 
+
 if(MATHPP_UNIT_TEST)
   add_compile_definitions(MATHPP_UNIT_TEST)
+  set(CMAKE_BUILD_TYPE "Debug")
   target_compile_options(Mathpp
     PRIVATE 
       ${PEDANTIC_COMPILE_OPTIONS}
   )
+endif()
+
+if(MATHPP_PERF_VAL)
+  add_compile_definitions(MATHPP_PERF_VAL)
+  target_compile_options(Mathpp
+    PRIVATE 
+      ${PEDANTIC_COMPILE_OPTIONS}
+  )
+
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT supported OUTPUT error)
+
+  if(supported)
+    message(STATUS "IPO / LTO enabled")
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+  else()
+    message(STATUS "IPO / LTO not supported: <${error}>")
+  endif()
+
+  if(MSVC)
+    add_compile_options("/Ox")
+  else()
+    add_compile_options("-O3")
+  endif()
 endif()
 
 set(PEDANTIC_COMPILE_OPTIONS
@@ -53,4 +81,17 @@ if(MATHPP_UNIT_TEST)
   include(Catch)
 
   add_subdirectory(validation)
+endif()
+
+if(MATHPP_PERF_VAL)
+  enable_testing()
+  include(CTest)
+
+  add_subdirectory(extern/catch2)
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/extern/catch2/extras")
+  include(Catch)
+
+  add_subdirectory(extern/benchpp)
+
+  add_subdirectory(perf_val)
 endif()
