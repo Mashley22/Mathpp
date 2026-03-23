@@ -7,4 +7,5 @@ target_sources(Mathpp
       modules/pow.cppm
       modules/abs.cppm
       modules/compare.cppm
+      modules/fma.cppm
 )

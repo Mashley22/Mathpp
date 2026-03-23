@@ -31,4 +31,6 @@
 #define MATHPP_CONST_FUNC __declspec(noalias)
 #endif
 
+#define MATHPP_IS_CONSTEXPR(...) requires { typename std::bool_constant<(__VA_ARGS__)>; }
+
 #endif /* MATHPP_MACROS_HPP */
