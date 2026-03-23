@@ -1,6 +1,7 @@
 module;
 
 #include <concepts>
+#include <cstdint>
 
 #include <Mathpp/macros.hpp>
 
@@ -24,8 +25,20 @@ concept HasMultiplicativeIdentity = requires {
 
 }
 
-
 export namespace mathpp {
+
+template<class T>
+struct MatchUnsignedWidth {
+  using type = 
+    std::conditional_t<sizeof(T) == sizeof(std::uint64_t), std::uint64_t,
+    std::conditional_t<sizeof(T) == sizeof(std::uint32_t), std::uint32_t,
+    std::conditional_t<sizeof(T) == sizeof(std::uint16_t), std::uint16_t,
+    std::conditional_t<sizeof(T) == sizeof(std::uint8_t),  std::uint8_t, 
+    void>>>>; // Fallback to void if no matching size exists
+};
+
+template<class T>
+using MatchUnsignedWidth_t = MatchUnsignedWidth<T>::type;
 
 template<class T>
 concept Addible = std::regular<T> &&

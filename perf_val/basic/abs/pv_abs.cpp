@@ -103,6 +103,7 @@ TEST_CASE( "integer abs", "[basic][abs]" ) {
 }
 
 TEST_CASE( "floating point abs", "[basic][abs]" ) {
+  // doesn't work for long double ... :(
   runValidations<double>();
   runValidations<float>();
 }

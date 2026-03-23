@@ -2,6 +2,7 @@ module;
 
 #include <bit>
 #include <cstdint>
+#include <numeric>
 #include <type_traits>
 
 #include <Mathpp/macros.hpp>
@@ -9,17 +10,6 @@ module;
 export module Mathpp.basic:abs;
 
 import Mathpp.common;
-
-namespace {
-
-template<typename T_uint>
-[[nodiscard]] MATHPP_CONST_FUNC
-constexpr T_uint
-floatingPointAbsMask(void) {
-  return ~(T_uint{0}) >> 1;
-}
-
-}
 
 export namespace mathpp {
 
@@ -29,38 +19,28 @@ constexpr T_out
 abs(T_in val) MATHPP_NOEXCEPT {
   static_assert(!std::is_unsigned_v<T_in>);
 
-  if (val >= T_in(0)) {
-    return T_out(val);
+  using UintIn_t = MatchUnsignedWidth_t<T_in>;
+
+  if constexpr (std::floating_point<T_in> && 
+                std::numeric_limits<T_in>::is_iec559 &&
+                !std::is_same_v<UintIn_t, void>) {
+
+    auto floatingPointAbsMask = [](){
+      return ~(UintIn_t{0}) >> 1;
+    };
+
+    UintIn_t bits = std::bit_cast<UintIn_t>(val);
+
+    bits &= floatingPointAbsMask();
+
+    return T_out(std::bit_cast<T_in>(bits));
   }
-  return T_out(T_out(0) - val);
-}
-
-template<Scalar T_out = double>
-[[nodiscard]] MATHPP_CONST_FUNC
-constexpr double 
-abs(double val) MATHPP_NOEXCEPT {
-  using Uint_t = std::uint64_t;
-  static_assert(sizeof(Uint_t) == sizeof(double));
-
-  Uint_t bits = std::bit_cast<Uint_t>(val);
-
-  bits &= floatingPointAbsMask<Uint_t>();
-
-  return T_out(std::bit_cast<double>(bits));
-}
-
-template<Scalar T_out = float>
-[[nodiscard]] MATHPP_CONST_FUNC
-constexpr float 
-abs(float val) MATHPP_NOEXCEPT {
-  using Uint_t = std::uint32_t;
-  static_assert(sizeof(Uint_t) == sizeof(float));
-
-  Uint_t bits = std::bit_cast<Uint_t>(val);
-
-  bits &= floatingPointAbsMask<Uint_t>();
-
-  return T_out(std::bit_cast<float>(bits));
+  else {
+    if (val >= T_in(0)) {
+      return T_out(val);
+    }
+    return T_out(T_out(0) - val);
+  }
 }
 
 }
