@@ -25,24 +25,35 @@ fma(T x, T y, T z) MATHPP_NOEXCEPT {
       return std::fma(x, y, z);
     }
     else {
+
+      if constexpr (std::is_same_v<T, float> &&
+                    MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fmaf)) {
+        return __builtin_fmaf(x, y, z);
+      }
+      else if constexpr (std::is_same_v<T, double> &&
+                         MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fma)) {
+        return __builtin_fma(x, y, z);
+      }
+      else if constexpr (std::is_same_v<T, long double> &&
+                         MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fmal)) {
+        return __builtin_fmal(x, y, z);
+      }
+
       return x * y + z;
     }
   }
 
-  if constexpr (std::is_same_v<T, float>) {
-    #if __has_builtin(__builtin_fmaf)
-      return __builtin_fmaf(x, y, z);
-    #endif
+  if constexpr (std::is_same_v<T, float> &&
+                MATHPP_HAS_BUILTIN(__builtin_fmaf)) {
+     return __builtin_fmaf(x, y, z);
   }
-  else if constexpr (std::is_same_v<T, double>) {
-    #if __has_builtin(__builtin_fma)
+  else if constexpr (std::is_same_v<T, double> && 
+                     MATHPP_HAS_BUILTIN(__builtin_fma)) {
       return __builtin_fma(x, y, z);
-    #endif
   }
-  else if constexpr (std::is_same_v<T, long double>) {
-    #if __has_builtin(__builtin_fmal)
-      return __builtin_fmal(x, y, z);
-    #endif
+  else if constexpr (std::is_same_v<T, long double> &&
+                     MATHPP_HAS_BUILTIN(__builtin_fmal)) {
+    return __builtin_fmal(x, y, z);
   }
 
   return x * y + z;

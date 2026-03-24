@@ -9,8 +9,9 @@ A c++23 module-based mathematical library providing `constexpr`, `noexcept` and 
 - **Exception Safety**
 - **Performance Parity with the c++ standard library**
 - **Type Support**: Works with all fundamental types, and any types with the arithmetic operators
+- **Naming is the same as cmath where applicable, better names are provided as seen fit**
 
-- **Edge Cases are not checked :)**
+- **Edge Cases are not checked :), i.e. no Nans or infs anywhere**
 
 ## Requirements
 

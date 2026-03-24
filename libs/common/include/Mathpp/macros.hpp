@@ -33,4 +33,16 @@
 
 #define MATHPP_IS_CONSTEXPR(...) requires { typename std::bool_constant<(__VA_ARGS__)>; }
 
+#ifdef __has_builtin
+#define MATHPP_HAS_BUILTIN(x) __has_builtin(x)
+#else
+#define MATHPP_HAS_BUILTIN(x) 0
+#endif
+
+#ifdef __has_constexpr_builtin
+#define MATHPP_HAS_CONSTEXPR_BUILTIN(x) __has_constexpr_builtin(x)
+#else
+#define MATHPP_HAS_CONSTEXPR_BUILTIN(x) 0
+#endif
+
 #endif /* MATHPP_MACROS_HPP */

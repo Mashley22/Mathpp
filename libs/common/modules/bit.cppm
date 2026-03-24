@@ -58,18 +58,20 @@ constexpr bool
 signbit(T val) MATHPP_NOEXCEPT {
   if constexpr (std::floating_point<T>) {
     if constexpr (std::is_constant_evaluated()) {
-      #if __has_constexpr_builtin(__builtin_signbit)
+      if constexpr (MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_signbit)) {
         return __builtin_signbit(val);
-      #else
+      }
+      else {
         return priv::customSignbit(val);
-      #endif 
+      }
     }
     else {
-      #if __has_builtin(__builtin_signbit)
+      if constexpr (MATHPP_HAS_BUILTIN(__builtin_signbit)) {
         return __builtin_signbit(val);
-      #else
+      }
+      else {
         return priv::customSignbit(val);
-      #endif
+      }
     }
   }
   else {
