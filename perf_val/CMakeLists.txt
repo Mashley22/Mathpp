@@ -5,7 +5,7 @@ function(add_perf_val TEST_NAME)
   target_link_libraries(${TEST_NAME}
     PRIVATE
       Mathpp
-      benchpp
+      Mathpp_pv_utils
       Catch2::Catch2WithMain
   )
 
@@ -17,5 +17,7 @@ function(add_perf_val TEST_NAME)
   catch_discover_tests(${TEST_NAME})
 
 endfunction()
+
+add_subdirectory(mathpp_pv_utils)
 
 add_subdirectory(basic)

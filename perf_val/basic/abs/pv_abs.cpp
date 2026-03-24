@@ -7,6 +7,7 @@
 #include <Bench++/macros.hpp>
 
 import Benchpp;
+import Mathpp_pv_utils;
 
 import Mathpp;
 
@@ -22,77 +23,48 @@ namespace mathpp {
 
 namespace {
 
-benchpp::Timer stdTimer;
-benchpp::Timer mathppTimer;
-
-template<typename T>
-requires std::is_arithmetic_v<T>
-[[nodiscard]] std::array<T, NUM_COUNT>
-generateRandomArray(void) {
-  std::array<T, NUM_COUNT> arr{};
-
-  std::random_device rd;
-  std::mt19937 gen(rd());
-
-  if constexpr (std::is_integral_v<T>) {
-    std::uniform_int_distribution<T> dist(LOWER_BOUND, UPPER_BOUND);
-    for (auto& v : arr)
-      v = dist(gen);
-  } else if constexpr (std::is_floating_point_v<T>) {
-    std::uniform_real_distribution<T> dist(LOWER_BOUND, UPPER_BOUND);
-    for (auto& v : arr)
-      v = dist(gen);
-  }
-
-  return arr;
-}
+pv_utils::Timer timer;
 
 template<typename T>
 BENCHPP_BENCHMARK_FUNC
 void
 stdAbs(const std::array<T, NUM_COUNT>& arr) {
-  stdTimer.start();
+  timer.std.start();
   for (const auto& v : arr) {
     volatile T val = std::abs(v);
     (void)val;
   }
-  stdTimer.stop();
-  stdTimer.recordAndReset();
+  timer.std.stop();
+  timer.std.recordAndReset();
 }
 
 template<typename T>
 BENCHPP_BENCHMARK_FUNC
 void
 mathppAbs(const std::array<T, NUM_COUNT>& arr) {
-  mathppTimer.start();
+  timer.mathpp.start();
   for (const auto& v : arr) {
     volatile T val = mathpp::abs(v);
     (void)val;
   }
-  mathppTimer.stop();
-  mathppTimer.recordAndReset();
+  timer.mathpp.stop();
+  timer.mathpp.recordAndReset();
 }
 
 template<typename T>
 void
 runValidations(void) {
-  stdTimer = benchpp::Timer{};
-  mathppTimer = benchpp::Timer{};
 
-  std::array<T, NUM_COUNT> randArr = generateRandomArray<T>();
+  timer.clear();
+
+  std::array<T, NUM_COUNT> randArr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
 
   for (std::size_t i = 0; i < RUN_COUNT; i++) {
     stdAbs(randArr);
     mathppAbs(randArr);
   }
 
-  auto stdStats = benchpp::Stats<benchpp::TimeCount_t>::generate(stdTimer.times());
-  auto mathppStats = benchpp::Stats<benchpp::TimeCount_t>::generate(mathppTimer.times());
-
-  double combinedStddevOfMean = std::sqrt(stdStats.varianceOfMean() + mathppStats.varianceOfMean());
-
-  REQUIRE(mathppStats.mean < stdStats.mean + combinedStddevOfMean * TOLERANCE);
-
+  REQUIRE(timer.cmpTimesWithinTolerance(TOLERANCE));
 }
 
 }
