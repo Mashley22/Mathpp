@@ -42,6 +42,19 @@ isNearlyEqual(T a, T b, T_relTolerance relativeTolerance, T absoluteTolerance) M
 }
 
 /**
+ *@brief \ref isNearlyEqual but with only a relative tolerance
+*/
+template<Scalar T, Scalar T_relTolerance = T>
+[[nodiscard]] MATHPP_CONST_FUNC
+constexpr bool
+isNearlyEqualRel(T a, T b, T_relTolerance relativeTolerance) MATHPP_NOEXCEPT {
+  MATHPP_CHECK(relativeTolerance >= T_relTolerance(0) && relativeTolerance < T_relTolerance(1));
+
+  T relativeToleranceAsAbsolute = std::max(abs(a), abs(b)) * relativeTolerance;
+  return abs(a - b) <= relativeToleranceAsAbsolute;
+}
+
+/**
  *@brief \ref isNearlyEqual but with only an absolute tolerance
 */
 template<Scalar T>
@@ -54,16 +67,13 @@ isNearlyEqualAbs(T a, T b, T absoluteTolerance) MATHPP_NOEXCEPT {
 }
 
 /**
- *@brief \ref isNearlyEqual but with only a relative tolerance
-*/
-template<Scalar T, Scalar T_relTolerance = T>
+ *@brief convenience function for floating point numbers
+ */
+template<std::floating_point T>
 [[nodiscard]] MATHPP_CONST_FUNC
-constexpr bool
-isNearlyEqualRel(T a, T b, T_relTolerance relativeTolerance) MATHPP_NOEXCEPT {
-  MATHPP_CHECK(relativeTolerance >= T_relTolerance(0) && relativeTolerance < T_relTolerance(1));
-
-  T relativeToleranceAsAbsolute = std::max(abs(a), abs(b)) * relativeTolerance;
-  return abs(a - b) <= relativeToleranceAsAbsolute;
+constexpr bool 
+isNearlyEqual(T a, T b, T relativeTolerance = std::numeric_limits<T>::epsilon()) MATHPP_NOEXCEPT {
+  return isNearlyEqualRel(a, b, relativeTolerance);
 }
 
 }
