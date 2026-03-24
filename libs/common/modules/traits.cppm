@@ -38,7 +38,20 @@ struct MatchUnsignedWidth {
 };
 
 template<class T>
+struct MatchSignedWidth {
+  using type = 
+    std::conditional_t<sizeof(T) == sizeof(std::int64_t), std::int64_t,
+    std::conditional_t<sizeof(T) == sizeof(std::int32_t), std::int32_t,
+    std::conditional_t<sizeof(T) == sizeof(std::int16_t), std::int16_t,
+    std::conditional_t<sizeof(T) == sizeof(std::int8_t),  std::int8_t, 
+    void>>>>; // Fallback to void if no matching size exists
+};
+
+template<class T>
 using MatchUnsignedWidth_t = MatchUnsignedWidth<T>::type;
+
+template<class T>
+using MatchSignedWidth_t = MatchSignedWidth<T>::type;
 
 template<class T>
 concept Addible = std::regular<T> &&

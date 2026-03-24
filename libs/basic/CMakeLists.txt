@@ -8,4 +8,5 @@ target_sources(Mathpp
       modules/abs.cppm
       modules/compare.cppm
       modules/fma.cppm
+      modules/trunc.cppm
 )
