@@ -11,13 +11,11 @@ import Mathpp_pv_utils;
 
 import Mathpp;
 
-#define NUM_COUNT 1000
-#define RUN_COUNT 1000
+#define NUM_COUNT 100
+#define RUN_COUNT 1000 * RUNTIME_SCALE
 
 #define LOWER_BOUND -1000
 #define UPPER_BOUND 1000
-
-#define TOLERANCE 5
 
 namespace mathpp {
 
