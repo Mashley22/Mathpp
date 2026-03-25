@@ -7,3 +7,4 @@ export import :compare;
 export import :fma;
 export import :trunc;
 export import :ceil;
+export import :floor;

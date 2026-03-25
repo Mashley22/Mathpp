@@ -10,4 +10,5 @@ target_sources(Mathpp
       modules/fma.cppm
       modules/trunc.cppm
       modules/ceil.cppm
+      modules/floor.cppm
 )
