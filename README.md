@@ -1,6 +1,7 @@
 # mathpp
 
 A c++23 module-based mathematical library providing `constexpr`, `noexcept` and no state math functions with feature and performance parity to the standard library, focusing on core functionality without extreme edge case handling.
+Focusing on floating point support for float and double using the iec559([IEEE754](https://en.wikipedia.org/wiki/IEEE_754-2008_revision)) standard.
 
 ## Features
 

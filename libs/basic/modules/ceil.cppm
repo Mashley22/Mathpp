@@ -22,7 +22,7 @@ ceilSmall(T val) MATHPP_NOEXCEPT {
   if (val > 0) {
     intVal++;
   }
-  return intVal;
+  return static_cast<T>(intVal);
 }
 
 template<std::floating_point T>

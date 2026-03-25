@@ -17,7 +17,7 @@ factorial(const std::size_t val) MATHPP_NOEXCEPT {
   T retVal{1};
 
   for (std::size_t i = 1; i <= val; i++) {
-    retVal *= i;
+    retVal *= static_cast<T>(i);
   }
 
   return retVal;

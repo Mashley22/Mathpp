@@ -39,7 +39,7 @@ abs(T_in val) MATHPP_NOEXCEPT {
     if (val >= T_in(0)) {
       return T_out(val);
     }
-    return T_out(T_out(0) - val);
+    return T_out(T_out(0) - T_out(val));
   }
 }
 

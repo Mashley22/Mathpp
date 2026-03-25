@@ -35,7 +35,7 @@ isNearlyEqual(T a, T b, T_relTolerance relativeTolerance, T absoluteTolerance) M
   MATHPP_CHECK(absoluteTolerance >= T(0));
 
   T absDelta = abs(a - b);
-  T relativeToleranceAsAbsolute = std::max(abs(a), abs(b)) * relativeTolerance;
+  T relativeToleranceAsAbsolute = static_cast<T>(static_cast<T_relTolerance>(std::max(abs(a), abs(b))) * relativeTolerance);
   T totalTolerance = relativeToleranceAsAbsolute + absoluteTolerance;
 
   return absDelta <= totalTolerance;
@@ -48,10 +48,7 @@ template<Scalar T, Scalar T_relTolerance = T>
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr bool
 isNearlyEqualRel(T a, T b, T_relTolerance relativeTolerance) MATHPP_NOEXCEPT {
-  MATHPP_CHECK(relativeTolerance >= T_relTolerance(0) && relativeTolerance < T_relTolerance(1));
-
-  T relativeToleranceAsAbsolute = std::max(abs(a), abs(b)) * relativeTolerance;
-  return abs(a - b) <= relativeToleranceAsAbsolute;
+  return isNearlyEqual<T, T_relTolerance>(a, b, relativeTolerance, T(0));
 }
 
 /**
@@ -61,9 +58,7 @@ template<Scalar T>
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr bool
 isNearlyEqualAbs(T a, T b, T absoluteTolerance) MATHPP_NOEXCEPT {
-  MATHPP_CHECK(absoluteTolerance > T(0));
-
-  return abs(a - b) <= absoluteTolerance;
+  return isNearlyEqual<T, T>(a, b, T(0), absoluteTolerance);
 }
 
 /**
