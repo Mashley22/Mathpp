@@ -6,3 +6,4 @@ export import :abs;
 export import :compare;
 export import :fma;
 export import :trunc;
+export import :ceil;
