@@ -2,7 +2,6 @@ module;
 
 #include <concepts>
 #include <numeric>
-#include <utility>
 
 #include <Mathpp/macros.hpp>
 
@@ -43,11 +42,7 @@ trunc(T val) MATHPP_NOEXCEPT {
       val <= static_cast<T>(std::numeric_limits<Int_t>::lowest())) {
     return priv::truncLarge(val);
   }
-  else {
-    return priv::truncSmall<T, Int_t>(val);
-  }
-
-  std::unreachable();
+  return priv::truncSmall<T, Int_t>(val);
 }
 
 }

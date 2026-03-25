@@ -2,7 +2,6 @@ module;
 
 #include <concepts>
 #include <numeric>
-#include <utility>
 
 #include <Mathpp/macros.hpp>
 
@@ -18,7 +17,7 @@ template<std::floating_point T, std::signed_integral T_int_t>
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr T
 floorSmall(T val) MATHPP_NOEXCEPT {
-  T_int_t intVal = static_cast<T_int_t>(val);
+  auto intVal = static_cast<T_int_t>(val);
   if (val < 0) {
     intVal--;
   }
@@ -47,11 +46,7 @@ floor(T val) MATHPP_NOEXCEPT {
       val <= static_cast<T>(std::numeric_limits<Int_t>::lowest())) {
     return priv::floorLarge(val);
   }
-  else {
-    return priv::floorSmall<T, Int_t>(val);
-  }
-
-  std::unreachable();
+  return priv::floorSmall<T, Int_t>(val);
 }
 
 }

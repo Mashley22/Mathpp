@@ -24,39 +24,35 @@ fma(T x, T y, T z) MATHPP_NOEXCEPT {
     if (MATHPP_IS_CONSTEXPR(std::fma(x, y, z))) {
       return std::fma(x, y, z);
     }
-    else {
-
-      if constexpr (std::is_same_v<T, float> &&
-                    MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fmaf)) {
-        return __builtin_fmaf(x, y, z);
-      }
-      else if constexpr (std::is_same_v<T, double> &&
-                         MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fma)) {
+    if constexpr (std::is_same_v<T, float> &&
+                  MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fmaf)) {
+      return __builtin_fmaf(x, y, z);
+    }
+    else if constexpr (std::is_same_v<T, double> &&
+                       MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fma)) {
+      return __builtin_fma(x, y, z);
+    }
+    else if constexpr (std::is_same_v<T, long double> &&
+                       MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fmal)) {
+      return __builtin_fmal(x, y, z);
+    }
+  }
+  else {
+    if constexpr (std::is_same_v<T, float> &&
+                  MATHPP_HAS_BUILTIN(__builtin_fmaf)) {
+       return __builtin_fmaf(x, y, z);
+    }
+    else if constexpr (std::is_same_v<T, double> && 
+                       MATHPP_HAS_BUILTIN(__builtin_fma)) {
         return __builtin_fma(x, y, z);
-      }
-      else if constexpr (std::is_same_v<T, long double> &&
-                         MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_fmal)) {
-        return __builtin_fmal(x, y, z);
-      }
-
-      return x * y + z;
+    }
+    else if constexpr (std::is_same_v<T, long double> &&
+                       MATHPP_HAS_BUILTIN(__builtin_fmal)) {
+      return __builtin_fmal(x, y, z);
     }
   }
 
-  if constexpr (std::is_same_v<T, float> &&
-                MATHPP_HAS_BUILTIN(__builtin_fmaf)) {
-     return __builtin_fmaf(x, y, z);
-  }
-  else if constexpr (std::is_same_v<T, double> && 
-                     MATHPP_HAS_BUILTIN(__builtin_fma)) {
-      return __builtin_fma(x, y, z);
-  }
-  else if constexpr (std::is_same_v<T, long double> &&
-                     MATHPP_HAS_BUILTIN(__builtin_fmal)) {
-    return __builtin_fmal(x, y, z);
-  }
-
-  return x * y + z;
+  return (x * y) + z;
 }
 
 }

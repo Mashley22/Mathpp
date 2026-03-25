@@ -2,7 +2,6 @@ module;
 
 #include <concepts>
 #include <numeric>
-#include <utility>
 
 #include <Mathpp/macros.hpp>
 
@@ -33,17 +32,12 @@ customSignbit(T val) MATHPP_NOEXCEPT {
 
     return mostSignificantBit(val) != 0;
   }
-  else {
-    if (val == 0) {
-      return (1 / val) < 0;
-    }
-    else if (val < 0) {
-      return true;
-    }
-    else {
-      return false;
-    }
+
+  if (val == 0) {
+    return (1 / val) < 0;
   }
+  
+  return val < 0;
 }
 
 }
@@ -57,28 +51,12 @@ template<Scalar T>
 constexpr bool 
 signbit(T val) MATHPP_NOEXCEPT {
   if constexpr (std::floating_point<T>) {
-    if constexpr (std::is_constant_evaluated()) {
-      if constexpr (MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_signbit)) {
-        return __builtin_signbit(val);
-      }
-      else {
-        return priv::customSignbit(val);
-      }
-    }
-    else {
-      if constexpr (MATHPP_HAS_BUILTIN(__builtin_signbit)) {
-        return __builtin_signbit(val);
-      }
-      else {
-        return priv::customSignbit(val);
-      }
+    if constexpr (MATHPP_HAS_CONSTEXPR_BUILTIN(__builtin_signbit) ||
+                  (MATHPP_HAS_BUILTIN(__builtin_signbit) && !std::is_constant_evaluated())) {
+      return __builtin_signbit(val);
     }
   }
-  else {
-    return priv::customSignbit(val);
-  }
-
-  std::unreachable();
+  return priv::customSignbit(val);
 }
 
 }
