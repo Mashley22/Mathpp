@@ -10,6 +10,7 @@ export module Mathpp.common:bit;
 
 import :traits;
 import :check;
+import :floating_point;
 
 #ifndef __has_builtin
   #define __has_builtin(x)
@@ -21,8 +22,8 @@ template<Scalar T>
 [[nodiscard]] MATHPP_PURE_FUNC
 constexpr bool 
 customSignbit(T val) MATHPP_NOEXCEPT {
-  if constexpr (std::numeric_limits<T>::is_iec559 &&
-                !std::same_as<MatchUnsignedWidth_t<T>, void>) {
+  if constexpr (std::same_as<T, float32> ||
+                std::same_as<T, float64>) {
 
     auto mostSignificantBit = [](T x) {
       auto bits = std::bit_cast<MatchUnsignedWidth_t<T>>(x);

@@ -65,6 +65,7 @@ TEST_CASE( "Factorial" , "[basic][factorial]" ) {
 
   SECTION( "floating point type" ) {
     STATIC_REQUIRE(test_factorial_float<double>());
+    STATIC_REQUIRE(test_factorial_float<float64>());
   }
 
 }

@@ -10,6 +10,8 @@ import Mathpp.common;
 
 namespace mathpp {
 
+using namespace mathpp::literals;
+
 TEST_CASE( "pow with integer exponent", "[pow][basic]" ) {
 
   SECTION( "integral type" ) {
@@ -21,11 +23,11 @@ TEST_CASE( "pow with integer exponent", "[pow][basic]" ) {
   }
 
   SECTION( "floating point type" ) {
-    TEST_POW(0.0, 5, 0.0);
-    TEST_POW(1.0, 43123, 1.0); // not too high for the constexpr step lim
-    TEST_POW(-1.0, 3, -1.0);
+    TEST_POW(0.0_f32, 5, 0.0_f32);
+    TEST_POW(1.0_f32, 43123, 1.0_f32); // not too high for the constexpr step lim
+    TEST_POW(-1.0_f32, 3, -1.0_f32);
 
-    TEST_POW(1231412343465.12341354, 0, 1.0);
+    TEST_POW(1231412343465.12341354_f32, 0, 1.0_f32);
   }
 
   

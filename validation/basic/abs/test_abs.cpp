@@ -25,6 +25,8 @@ import Mathpp.basic;
 
 namespace mathpp {
 
+using namespace mathpp::literals;
+
 TEST_CASE( "abs" , "[abs][common]" ) {
 
   SECTION( "integral types" ) {
@@ -44,12 +46,20 @@ TEST_CASE( "abs" , "[abs][common]" ) {
   }
 
   SECTION( "floating point types" ) {
-    STATIC_REQUIRE(abs(3.0) == 3.0);
-    STATIC_REQUIRE(abs(-3.0) == 3.0);
+    STATIC_REQUIRE(abs(3.0_f64)  == 3.0_f64);
+    STATIC_REQUIRE(abs(-3.0_f64) == 3.0_f64);
 
-    STATIC_REQUIRE(abs(0.0) == 0.0);
-    STATIC_REQUIRE(abs(-0.0) == 0.0);
-    STATIC_REQUIRE(abs(0.0) == -0.0);
+    STATIC_REQUIRE(abs(0.0_f64)  == 0.0_f64);
+    STATIC_REQUIRE(abs(-0.0_f64) == 0.0_f64);
+
+    STATIC_REQUIRE(abs(3.0_f32)  == 3.0_f32);
+    STATIC_REQUIRE(abs(-3.0_f32) == 3.0_f32);
+
+    STATIC_REQUIRE(abs(0.0_f32)  == 0.0_f32);
+    STATIC_REQUIRE(abs(-0.0_f32) == 0.0_f32);
+
+    STATIC_REQUIRE(testAbsLimitValsFloat(float32));
+    STATIC_REQUIRE(testAbsLimitValsFloat(float64));
 
     STATIC_REQUIRE(testAbsLimitValsFloat(float));
     STATIC_REQUIRE(testAbsLimitValsFloat(double));

@@ -70,4 +70,22 @@ struct iec559_traits<float64> {
   
 };
 
+namespace literals {
+  constexpr float32 operator ""_f32(long double d) { 
+    return static_cast<float32>(d); 
+  }
+  
+  constexpr float32 operator ""_f32(unsigned long long int i) {
+    return static_cast<float32>(i);
+  }
+
+  constexpr float64 operator ""_f64(long double d) { 
+    return static_cast<float64>(d); 
+  }
+  
+  constexpr float64 operator ""_f64(unsigned long long int i) {
+    return static_cast<float64>(i);
+  }
+}
+
 }

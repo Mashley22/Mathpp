@@ -25,6 +25,7 @@ Focusing on floating point support for float and double using the iec559([IEEE75
 ## Usage
 
 - add as subdirectory then using target_link_libraries link against Mathpp
+- in general the library uses a float32/64 type, this should typically be an alias to either float or double/std::float32 etc. some functions are agnostic some aren't.
 
 ## Errors and edge cases
 
