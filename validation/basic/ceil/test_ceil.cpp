@@ -12,7 +12,7 @@ using namespace mathpp::literals;
 
 TEST_CASE( "floating point ceil", "[trunc][basic]" ) {
 
-  SECTION( "float64_t (_f64)" ) {
+  SECTION( "float64" ) {
     STATIC_REQUIRE(isNearlyEqual(ceil(3.7_f64),  4.0_f64));
     STATIC_REQUIRE(isNearlyEqual(ceil(-3.7_f64), -3.0_f64));
 
@@ -20,7 +20,7 @@ TEST_CASE( "floating point ceil", "[trunc][basic]" ) {
     STATIC_REQUIRE(isNearlyEqual(ceil(-0.0_f64), 0.0_f64));
   }
 
-  SECTION( "float32_t (_f32)" ) {
+  SECTION( "float32" ) {
     STATIC_REQUIRE(isNearlyEqual(ceil(3.7_f32),  4.0_f32));
     STATIC_REQUIRE(isNearlyEqual(ceil(-3.7_f32), -3.0_f32));
 

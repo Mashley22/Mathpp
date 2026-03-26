@@ -29,7 +29,7 @@ TEST_CASE( "compare" , "[compare][common]" ) {
     STATIC_REQUIRE(isNearlyEqual<int, float64>(-2, -10, 0.75_f64, 1));
   }
 
-  SECTION( "float64 (_f64)" ) {
+  SECTION( "float64" ) {
     STATIC_REQUIRE(!isNearlyEqualAbs(0.0_f64, 5.0_f64, 3.0_f64));
     STATIC_REQUIRE(!isNearlyEqualAbs(0.0_f64, -5.0_f64, 3.0_f64));
     STATIC_REQUIRE(isNearlyEqualAbs(2.0_f64, 5.0_f64, 3.0_f64));
@@ -47,7 +47,7 @@ TEST_CASE( "compare" , "[compare][common]" ) {
     STATIC_REQUIRE(isNearlyEqual(-2.0_f64, -10.0_f64, 0.75_f64, 1.0_f64));
   }
 
-  SECTION( "float32 (_f32)" ) {
+  SECTION( "float32" ) {
     STATIC_REQUIRE(!isNearlyEqualAbs(0.0_f32, 5.0_f32, 3.0_f32));
     STATIC_REQUIRE(!isNearlyEqualAbs(0.0_f32, -5.0_f32, 3.0_f32));
     STATIC_REQUIRE(isNearlyEqualAbs(2.0_f32, 5.0_f32, 3.0_f32));
