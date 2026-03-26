@@ -9,3 +9,4 @@ export import :trunc;
 export import :ceil;
 export import :floor;
 export import :bit;
+export import :ilogb;

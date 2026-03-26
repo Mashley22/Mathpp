@@ -12,4 +12,5 @@ target_sources(Mathpp
       modules/ceil.cppm
       modules/floor.cppm
       modules/bit.cppm
+      modules/ilogb.cppm
 )

@@ -1,8 +1,11 @@
 module;
 
+#include <bit>
 #include <concepts>
 #include <numeric>
 #include <stdfloat>
+
+#include <Mathpp/macros.hpp>
 
 export module Mathpp.common:floating_point;
 
@@ -26,9 +29,8 @@ static_assert(std::numeric_limits<double>::is_iec559, "Unsupported floating poin
 #endif
 static_assert(sizeof(float64) == 8);
 
-// left undefined so non-floats cause a compile error
-template<std::floating_point T>
-struct floating_point_traits;
+template<typename T>
+concept floating_point = std::same_as<T, float32> || std::same_as<T, float64>;
 
 template<std::floating_point T>
 struct iec559_traits;
@@ -41,10 +43,13 @@ struct iec559_traits<float32> {
   static constexpr int total_bits    = 32;
   static constexpr int exponent_bits = 8;
   static constexpr int mantissa_bits = 23;
+
+  static constexpr int exponent_bit_shift = 23;
   
   static constexpr int exponent_bias = 127;
   static constexpr int max_exponent = 127;
   static constexpr int raw_exponent_max = 255;
+  static constexpr int subnormal_exponent = -126;
 
   static constexpr uint_type sign_mask     = 0x80000000U; 
   static constexpr uint_type exponent_mask = 0x7F800000U; 
@@ -59,16 +64,30 @@ struct iec559_traits<float64> {
   static constexpr int total_bits    = 64;
   static constexpr int exponent_bits = 11;
   static constexpr int mantissa_bits = 52;
+
+  static constexpr int exponent_bit_shift = 52;
   
   static constexpr int exponent_bias = 1023;
   static constexpr int max_exponent = 1023;
   static constexpr int raw_exponent_max = 2047;
+  static constexpr int subnormal_exponent = -1022;
 
   static constexpr uint_type sign_mask     = 0x8000000000000000ULL; 
   static constexpr uint_type exponent_mask = 0x7FF0000000000000ULL; 
   static constexpr uint_type mantissa_mask = 0x000FFFFFFFFFFFFFULL; 
   
 };
+
+template<floating_point T>
+struct floating_point_traits : public std::conditional_t<
+  std::numeric_limits<T>::is_iec559,
+  iec559_traits<T>,
+  void
+> {};
+
+static_assert(!std::is_same_v<floating_point_traits<float32>, void> ||
+              !std::is_same_v<floating_point_traits<float64>, void>,
+              "couldn't find suitable floating point bit layout!");
 
 namespace literals {
   constexpr float32 operator ""_f32(long double d) { 
@@ -88,7 +107,21 @@ namespace literals {
   }
 }
 
-template<typename T>
-concept floating_point = std::same_as<T, float32> || std::same_as<T, float64>;
+template<floating_point T>
+[[nodiscard]] MATHPP_CONST_FUNC
+constexpr int
+biasedExponent(T val) MATHPP_NOEXCEPT {
+  auto bits = std::bit_cast<typename floating_point_traits<T>::uint_type>(val);
+  return static_cast<int>((bits & floating_point_traits<T>::exponent_mask) >> floating_point_traits<T>::exponent_bit_shift);
+}
+
+template<floating_point T>
+[[nodiscard]] MATHPP_CONST_FUNC
+constexpr MatchUnsignedWidth_t<T>
+mantissa(T val) MATHPP_NOEXCEPT {
+  auto bits = std::bit_cast<typename floating_point_traits<T>::uint_type>(val);
+  return static_cast<MatchUnsignedWidth_t<T>>(bits & floating_point_traits<T>::mantissa_mask);
+}
+
 
 }
