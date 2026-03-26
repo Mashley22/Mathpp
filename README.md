@@ -1,6 +1,6 @@
 # mathpp
 
-A c++23 module-based mathematical library providing `constexpr`, `noexcept` and no state math functions with feature and performance parity to the standard library, focusing on core functionality without extreme edge case handling.
+A c++23 module-based mathematical library providing `constexpr`, `noexcept` and no state math functions with feature and performance parity to the standard library, focusing on core functionality and performance.
 Focusing on floating point support for float and double using the iec559([IEEE754](https://en.wikipedia.org/wiki/IEEE_754-2008_revision)) standard.
 
 ## Features
@@ -10,9 +10,9 @@ Focusing on floating point support for float and double using the iec559([IEEE75
 - **Exception Safety**
 - **Performance Parity with the c++ standard library**
 - **Type Support**: Works with all fundamental types, and any types with the arithmetic operators
-- **Naming is the same as cmath where applicable, better names are provided as seen fit**
+- **Naming is the same as cmath where applicable**
 
-- **Edge Cases are not checked :), i.e. no Nans or infs anywhere**
+- **Nans and infs are in general undefined and will just be early returns**
 
 ## Requirements
 
@@ -27,16 +27,9 @@ Focusing on floating point support for float and double using the iec559([IEEE75
 - add as subdirectory then using target_link_libraries link against Mathpp
 - in general the library uses a float32/64 type, this should typically be an alias to either float or double/std::float32 etc. some functions are agnostic some aren't.
 
-## Errors and edge cases
-
-In general errors and edge cases are not well dealt with.
-This is on purpose to provide the noexcept constexpr stuff.
-If more robust error checking and edge case handling is neccessary than use something else or 
-sanitize inputs.
-
 ## Performance validation
 
-Provided as a test suite in build/perf_val directory, using ctest you can run all of them at once.
+Provided as a test suite, with a build script in build/perf_val directory, using ctest you can run all of them at once.
 In general the performance tolerance is such that the mean performance is within statistical signficance of the stl.
 Individual tests may fail due to statistical variances.
 Will eventually provide a way to have more controls on this, i.e. run control, tolerance.
