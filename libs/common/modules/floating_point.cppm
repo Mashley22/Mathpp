@@ -88,4 +88,7 @@ namespace literals {
   }
 }
 
+template<typename T>
+concept floating_point = std::same_as<T, float32> || std::same_as<T, float64>;
+
 }

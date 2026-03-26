@@ -2,7 +2,7 @@
 
 #include <Mathpp/macros.hpp>
 
-import Mathpp.common;
+import Mathpp;
 
 namespace mathpp {
 

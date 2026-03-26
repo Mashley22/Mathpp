@@ -5,7 +5,6 @@ target_sources(Mathpp
     FILES  
       modules/check.cppm
       modules/traits.cppm
-      modules/bit.cppm
       modules/floating_point.cppm
       common.cppm
 )
