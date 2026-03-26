@@ -1,5 +1,6 @@
 module;
 
+#include <bit>
 #include <concepts>
 #include <numeric>
 
@@ -16,18 +17,16 @@ import :check;
 
 namespace mathpp::priv {
 
-namespace {
-
-template<mathpp::Scalar T>
+template<Scalar T>
 [[nodiscard]] MATHPP_PURE_FUNC
 constexpr bool 
 customSignbit(T val) MATHPP_NOEXCEPT {
   if constexpr (std::numeric_limits<T>::is_iec559 &&
-                !std::same_as<MatchUnsignedWidth<T>, void>) {
+                !std::same_as<MatchUnsignedWidth_t<T>, void>) {
 
     auto mostSignificantBit = [](T x) {
-      MatchUnsignedWidth<T> bits = std::bit_cast<MatchUnsignedWidth>(x);
-      return (bits >> (sizeof(MatchUnsignedWidth<T>) - 1));
+      auto bits = std::bit_cast<MatchUnsignedWidth_t<T>>(x);
+      return (bits >> (sizeof(MatchUnsignedWidth_t<T>) - 1));
     };
 
     return mostSignificantBit(val) != 0;
@@ -38,8 +37,6 @@ customSignbit(T val) MATHPP_NOEXCEPT {
   }
   
   return val < 0;
-}
-
 }
 
 }
