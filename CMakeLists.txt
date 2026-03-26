@@ -15,12 +15,16 @@ add_library(Mathpp)
 option(MATHPP_UNIT_TEST "build the unit tests" OFF)
 option(MATHPP_PERF_VAL "build the performance validations" OFF) 
 
-set(MATHPP_SAFE_FAST_MATH_FLAGS
-  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
-    -fno-math-errno
+set(MATHPP_SAFE_FAST_MATH
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
     -fno-trapping-math
     -fno-rounding-math
-    -fno-signaling-nans
+  >
+
+  $<$<CXX_COMPILER_ID:GNU>>:
+    -fno-trapping-math
+    -fno-rounding-math
+    -fno-trapping-math
   >
   
   $<$<CXX_COMPILER_ID:MSVC>:
@@ -75,11 +79,6 @@ endif()
 
 if(MATHPP_PERF_VAL)
   add_compile_definitions(MATHPP_PERF_VAL)
-  target_compile_options(Mathpp
-    PRIVATE 
-      ${PEDANTIC_COMPILE_OPTIONS}
-  )
-
   include(CheckIPOSupported)
   check_ipo_supported(RESULT supported OUTPUT error)
 
@@ -90,7 +89,6 @@ if(MATHPP_PERF_VAL)
     message(STATUS "IPO / LTO not supported: <${error}>")
   endif()
 
-  add_compile_options(${MATHPP_SAFE_FAST_MATH})
   if(MSVC)
     add_compile_options("/Ox")
   else()

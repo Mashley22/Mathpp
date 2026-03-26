@@ -36,6 +36,7 @@ function(add_perf_val TEST_NAME)
   target_compile_options(${TEST_NAME}
     PRIVATE
       ${PEDANTIC_COMPILE_OPTIONS}
+      ${MATHPP_SAFE_FAST_MATH}
   )
 
   catch_discover_tests(${TEST_NAME})
