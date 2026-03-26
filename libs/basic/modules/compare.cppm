@@ -64,7 +64,8 @@ isNearlyEqualAbs(T a, T b, T absoluteTolerance) MATHPP_NOEXCEPT {
 /**
  *@brief convenience function for floating point numbers
  */
-template<std::floating_point T>
+template<typename T>
+requires std::is_arithmetic_v<T>
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr bool 
 isNearlyEqual(T a, T b, T relativeTolerance = std::numeric_limits<T>::epsilon()) MATHPP_NOEXCEPT {

@@ -26,7 +26,7 @@ pv_utils::Timer timer;
 template<typename T>
 BENCHPP_BENCHMARK_FUNC
 void
-stdAbs(const std::array<T, NUM_COUNT>& arr) {
+stdFloor(const std::array<T, NUM_COUNT>& arr) {
   timer.std.start();
   for (const auto& v : arr) {
     volatile T val = std::floor(v);
@@ -39,7 +39,7 @@ stdAbs(const std::array<T, NUM_COUNT>& arr) {
 template<typename T>
 BENCHPP_BENCHMARK_FUNC
 void
-mathppAbs(const std::array<T, NUM_COUNT>& arr) {
+mathppFloor(const std::array<T, NUM_COUNT>& arr) {
   timer.mathpp.start();
   for (const auto& v : arr) {
     volatile T val = mathpp::floor(v);
@@ -56,9 +56,13 @@ runValidations(void) {
 
   std::array<T, NUM_COUNT> randArr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
 
+  for (const auto& v : randArr) {
+    REQUIRE(isNearlyEqual(std::floor(v), mathpp::floor(v)));
+  }
+
   for (std::size_t i = 0; i < RUN_COUNT; i++) {
-    stdAbs(randArr);
-    mathppAbs(randArr);
+    stdFloor(randArr);
+    mathppFloor(randArr);
   }
 
   REQUIRE(timer.cmpTimesWithinTolerance(TOLERANCE));

@@ -57,6 +57,10 @@ runValidations(void) {
 
   std::array<T, NUM_COUNT> randArr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
 
+  for (const auto& v : randArr) {
+    REQUIRE(isNearlyEqualRel(std::abs(v), mathpp::abs(v), std::numeric_limits<T>::epsilon()));
+  }
+
   for (std::size_t i = 0; i < RUN_COUNT; i++) {
     stdAbs(randArr);
     mathppAbs(randArr);
