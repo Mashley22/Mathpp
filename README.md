@@ -8,7 +8,7 @@ Focusing on floating point support for float and double using the iec559([IEEE75
 - **c++ Modules**
 - **Compile-time Evaluation**
 - **Exception Safety**
-- **Performance Parity with the c++ standard library**
+- **Performance Parity with the c++ standard library** see [BENCHMARKS.md](./docs/BENCHMARKS.md)
 - **Type Support**: Works with all fundamental types, and any types with the arithmetic operators
 - **Naming is the same as cmath where applicable**
 
