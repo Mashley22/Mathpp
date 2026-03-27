@@ -1,8 +1,9 @@
 #include <array>
 #include <cmath>
-#include <random>
 
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
 #include <catch2/catch_all.hpp>
+#endif
 
 #include <Bench++/macros.hpp>
 
@@ -49,6 +50,12 @@ mathppFloor(const std::array<T, NUM_COUNT>& arr) {
   timer.mathpp.recordAndReset();
 }
 
+}
+
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
+
+namespace {
+
 template<typename T>
 void
 runValidations(void) {
@@ -75,5 +82,83 @@ TEST_CASE( "floor", "[basic][floor]" ) {
   runValidations<float>();
   runValidations<long double>();
 }
+
+#else
+
+namespace {
+
+template<typename T, benchpp::Timer& timer>
+BENCHPP_BENCHMARK_FUNC
+void
+stdFloor(void){
+  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  timer.start();
+  for (const auto& v : arr) {
+    volatile T val = std::floor(v);
+    (void)val;
+  }
+  timer.stop();
+  timer.recordAndReset();
+}
+
+template<typename T, benchpp::Timer& timer>
+BENCHPP_BENCHMARK_FUNC
+void
+mathppFloor(void){
+  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  timer.start();
+  for (const auto& v : arr) {
+    volatile T val = mathpp::floor(v);
+    (void)val;
+  }
+  timer.stop();
+  timer.recordAndReset();
+}
+
+benchpp::Timer stdFloor_f32Timer;
+benchpp::Timer stdFloor_f64Timer;
+benchpp::Timer mathppFloor_f32Timer;
+benchpp::Timer mathppFloor_f64Timer;
+
+benchpp::BenchmarkInfo stdFloor_f32 = {
+  .name = "std_floor",
+  .group = "std_f32",
+  .function = &stdFloor<float32, stdFloor_f32Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &stdFloor_f32Timer
+};
+
+benchpp::BenchmarkInfo stdFloor_f64 = {
+  .name = "std_floor",
+  .group = "std_f64",
+  .function = &stdFloor<float64, stdFloor_f64Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &stdFloor_f64Timer
+};
+
+benchpp::BenchmarkInfo mathppFloor_f32 = {
+  .name = "mathpp_floor",
+  .group = "mathpp_f32",
+  .function = &mathppFloor<float32, mathppFloor_f32Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &mathppFloor_f32Timer
+};
+
+benchpp::BenchmarkInfo mathppFloor_f64 = {
+  .name = "mathpp_floor",
+  .group = "mathpp_f64",
+  .function = &mathppFloor<float64, mathppFloor_f64Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &mathppFloor_f64Timer
+};
+
+}
+
+REGISTER_BENCHMARK(stdFloor_f32);
+REGISTER_BENCHMARK(stdFloor_f64);
+REGISTER_BENCHMARK(mathppFloor_f32);
+REGISTER_BENCHMARK(mathppFloor_f64);
+
+#endif /* MATHPP_PERF_VAL_AS_BENCHMARK */
 
 }

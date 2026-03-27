@@ -1,0 +1,1 @@
+eval ./build.sh -DMATHPP_PERF_VAL_AS_BENCHMARK=y

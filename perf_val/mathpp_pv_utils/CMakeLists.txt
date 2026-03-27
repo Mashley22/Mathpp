@@ -1,9 +1,16 @@
 add_library(Mathpp_pv_utils)
 
-target_link_libraries(Mathpp_pv_utils
-  PUBLIC
-    benchpp
-)
+if(MATHPP_PERF_VAL_AS_BENCHMARK)
+  target_link_libraries(Mathpp_pv_utils
+    PUBLIC
+      benchpp_with_main
+  )
+else()
+  target_link_libraries(Mathpp_pv_utils
+    PUBLIC
+      benchpp
+  )
+endif()
 
 target_sources(Mathpp_pv_utils
   PUBLIC

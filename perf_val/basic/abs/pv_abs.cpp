@@ -2,7 +2,9 @@
 #include <cmath>
 #include <random>
 
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
 #include <catch2/catch_all.hpp>
+#endif
 
 #include <Bench++/macros.hpp>
 
@@ -49,6 +51,12 @@ mathppAbs(const std::array<T, NUM_COUNT>& arr) {
   timer.mathpp.recordAndReset();
 }
 
+}
+
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK 
+
+namespace {
+
 template<typename T>
 void
 runValidations(void) {
@@ -81,5 +89,83 @@ TEST_CASE( "floating point abs", "[basic][abs]" ) {
   runValidations<double>();
   runValidations<float>();
 }
+
+#else
+
+namespace {
+
+template<typename T, benchpp::Timer& timer>
+BENCHPP_BENCHMARK_FUNC
+void
+stdAbs(void){
+  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  timer.start();
+  for (const auto& v : arr) {
+    volatile T val = std::abs(v);
+    (void)val;
+  }
+  timer.stop();
+  timer.recordAndReset();
+}
+
+template<typename T, benchpp::Timer& timer>
+BENCHPP_BENCHMARK_FUNC
+void
+mathppAbs(void){
+  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  timer.start();
+  for (const auto& v : arr) {
+    volatile T val = mathpp::abs(v);
+    (void)val;
+  }
+  timer.stop();
+  timer.recordAndReset();
+}
+
+benchpp::Timer stdAbs_f32Timer;
+benchpp::Timer stdAbs_f64Timer;
+benchpp::Timer mathppAbs_f32Timer;
+benchpp::Timer mathppAbs_f64Timer;
+
+benchpp::BenchmarkInfo stdAbs_f32 = {
+  .name = "std_abs",
+  .group = "std_f32",
+  .function = &stdAbs<float32, stdAbs_f32Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &stdAbs_f32Timer
+};
+
+benchpp::BenchmarkInfo stdAbs_f64 = {
+  .name = "std_abs",
+  .group = "std_f64",
+  .function = &stdAbs<float64, stdAbs_f64Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &stdAbs_f64Timer
+};
+
+benchpp::BenchmarkInfo mathppAbs_f32 = {
+  .name = "mathpp_abs",
+  .group = "mathpp_f32",
+  .function = &mathppAbs<float32, mathppAbs_f32Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &mathppAbs_f32Timer
+};
+
+benchpp::BenchmarkInfo mathppAbs_f64 = {
+  .name = "mathpp_abs",
+  .group = "mathpp_f64",
+  .function = &mathppAbs<float64, mathppAbs_f64Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &mathppAbs_f64Timer
+};
+
+}
+
+REGISTER_BENCHMARK(stdAbs_f32);
+REGISTER_BENCHMARK(stdAbs_f64);
+REGISTER_BENCHMARK(mathppAbs_f32);
+REGISTER_BENCHMARK(mathppAbs_f64);
+
+#endif /* MATHPP_PERF_VAL_AS_BENCHMARK */
 
 }

@@ -14,24 +14,19 @@ add_library(Mathpp)
 
 option(MATHPP_UNIT_TEST "build the unit tests" OFF)
 option(MATHPP_PERF_VAL "build the performance validations" OFF) 
+option(MATHPP_PERF_VAL_AS_BENCHMARK "build the performance validations as a set of benchmarks" OFF)
 
-set(MATHPP_SAFE_FAST_MATH
-  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
-    -fno-trapping-math
-    -fno-rounding-math
-  >
-
-  $<$<CXX_COMPILER_ID:GNU>>:
-    -fno-trapping-math
-    -fno-rounding-math
-    -fno-trapping-math
-  >
-  
-  $<$<CXX_COMPILER_ID:MSVC>:
+if(MSVC)
+  set(MATHPP_SAFE_FAST_MATH
     /fp:precise  
     /fp:except-  
-  >
-)
+  )
+else()
+  set(MATHPP_SAFE_FAST_MATH
+    -fno-trapping-math
+    -fno-rounding-math
+  )
+endif()
 
 set(PEDANTIC_COMPILE_OPTIONS
   $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
@@ -94,6 +89,10 @@ if(MATHPP_PERF_VAL)
   else()
     add_compile_options("-O3")
   endif()
+
+  if(MATHPP_PERF_VAL_AS_BENCHMARK)
+    add_compile_definitions(MATHPP_PERF_VAL_AS_BENCHMARK)
+  endif()
 endif()
 
 add_subdirectory(libs)
@@ -110,12 +109,14 @@ if(MATHPP_UNIT_TEST)
 endif()
 
 if(MATHPP_PERF_VAL)
-  enable_testing()
-  include(CTest)
 
-  add_subdirectory(extern/catch2)
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/extern/catch2/extras")
-  include(Catch)
+  if(NOT MATHPP_PERF_VAL_AS_BENCHMARK)
+    enable_testing()
+    include(CTest)
+    add_subdirectory(extern/catch2)
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/extern/catch2/extras")
+    include(Catch)
+  endif()
 
   add_subdirectory(extern/benchpp)
 

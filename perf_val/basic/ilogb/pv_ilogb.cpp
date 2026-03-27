@@ -1,8 +1,9 @@
 #include <array>
 #include <cmath>
-#include <random>
 
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
 #include <catch2/catch_all.hpp>
+#endif
 
 #include <Bench++/macros.hpp>
 
@@ -49,6 +50,12 @@ mathppIlogb(const std::array<T, NUM_COUNT>& arr) {
   timer.mathpp.recordAndReset();
 }
 
+}
+
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
+
+namespace {
+
 template<typename T>
 void
 runValidations(void) {
@@ -75,5 +82,82 @@ TEST_CASE( "ilogb", "[basic][ilogb]" ) {
   runValidations<float32>();
   // no long double ... :(
 }
+#else
+
+namespace {
+
+template<typename T, benchpp::Timer& timer>
+BENCHPP_BENCHMARK_FUNC
+void
+stdIlogb(void){
+  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  timer.start();
+  for (const auto& v : arr) {
+    volatile int val = std::ilogb(v);
+    (void)val;
+  }
+  timer.stop();
+  timer.recordAndReset();
+}
+
+template<typename T, benchpp::Timer& timer>
+BENCHPP_BENCHMARK_FUNC
+void
+mathppIlogb(void){
+  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  timer.start();
+  for (const auto& v : arr) {
+    volatile int val = mathpp::ilogb(v);
+    (void)val;
+  }
+  timer.stop();
+  timer.recordAndReset();
+}
+
+benchpp::Timer stdIlogb_f32Timer;
+benchpp::Timer stdIlogb_f64Timer;
+benchpp::Timer mathppIlogb_f32Timer;
+benchpp::Timer mathppIlogb_f64Timer;
+
+benchpp::BenchmarkInfo stdIlogb_f32 = {
+  .name = "std_ilogb",
+  .group = "std_f32",
+  .function = &stdIlogb<float32, stdIlogb_f32Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &stdIlogb_f32Timer
+};
+
+benchpp::BenchmarkInfo stdIlogb_f64 = {
+  .name = "std_ilogb",
+  .group = "std_f64",
+  .function = &stdIlogb<float64, stdIlogb_f64Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &stdIlogb_f64Timer
+};
+
+benchpp::BenchmarkInfo mathppIlogb_f32 = {
+  .name = "mathpp_ilogb",
+  .group = "mathpp_f32",
+  .function = &mathppIlogb<float32, mathppIlogb_f32Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &mathppIlogb_f32Timer
+};
+
+benchpp::BenchmarkInfo mathppIlogb_f64 = {
+  .name = "mathpp_ilogb",
+  .group = "mathpp_f64",
+  .function = &mathppIlogb<float64, mathppIlogb_f64Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &mathppIlogb_f64Timer
+};
+
+}
+
+REGISTER_BENCHMARK(stdIlogb_f32);
+REGISTER_BENCHMARK(stdIlogb_f64);
+REGISTER_BENCHMARK(mathppIlogb_f32);
+REGISTER_BENCHMARK(mathppIlogb_f64);
+
+#endif /* MATHPP_PERF_VAL_AS_BENCHMARK */
 
 }

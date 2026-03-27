@@ -1,8 +1,9 @@
 #include <array>
 #include <cmath>
-#include <random>
 
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
 #include <catch2/catch_all.hpp>
+#endif
 
 #include <Bench++/macros.hpp>
 
@@ -49,6 +50,12 @@ mathppCeil(const std::array<T, NUM_COUNT>& arr) {
   timer.mathpp.recordAndReset();
 }
 
+}
+
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
+
+namespace {
+
 template<typename T>
 void
 runValidations(void) {
@@ -75,5 +82,83 @@ TEST_CASE( "ceil", "[basic][ceil]" ) {
   runValidations<float>();
   runValidations<long double>();
 }
+
+#else
+
+namespace {
+
+template<typename T, benchpp::Timer& timer>
+BENCHPP_BENCHMARK_FUNC
+void
+stdCeil(void){
+  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  timer.start();
+  for (const auto& v : arr) {
+    volatile T val = std::ceil(v);
+    (void)val;
+  }
+  timer.stop();
+  timer.recordAndReset();
+}
+
+template<typename T, benchpp::Timer& timer>
+BENCHPP_BENCHMARK_FUNC
+void
+mathppCeil(void){
+  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  timer.start();
+  for (const auto& v : arr) {
+    volatile T val = mathpp::ceil(v);
+    (void)val;
+  }
+  timer.stop();
+  timer.recordAndReset();
+}
+
+benchpp::Timer stdCeil_f32Timer;
+benchpp::Timer stdCeil_f64Timer;
+benchpp::Timer mathppCeil_f32Timer;
+benchpp::Timer mathppCeil_f64Timer;
+
+benchpp::BenchmarkInfo stdCeil_f32 = {
+  .name = "std_ceil",
+  .group = "std_f32",
+  .function = &stdCeil<float32, stdCeil_f32Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &stdCeil_f32Timer
+};
+
+benchpp::BenchmarkInfo stdCeil_f64 = {
+  .name = "std_ceil",
+  .group = "std_f64",
+  .function = &stdCeil<float64, stdCeil_f64Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &stdCeil_f64Timer
+};
+
+benchpp::BenchmarkInfo mathppCeil_f32 = {
+  .name = "mathpp_ceil",
+  .group = "mathpp_f32",
+  .function = &mathppCeil<float32, mathppCeil_f32Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &mathppCeil_f32Timer
+};
+
+benchpp::BenchmarkInfo mathppCeil_f64 = {
+  .name = "mathpp_ceil",
+  .group = "mathpp_f64",
+  .function = &mathppCeil<float64, mathppCeil_f64Timer>,
+  .runNum = RUN_COUNT,
+  .p_timer = &mathppCeil_f64Timer
+};
+
+}
+
+REGISTER_BENCHMARK(stdCeil_f32);
+REGISTER_BENCHMARK(stdCeil_f64);
+REGISTER_BENCHMARK(mathppCeil_f32);
+REGISTER_BENCHMARK(mathppCeil_f64);
+
+#endif /* MATHPP_PERF_VAL_AS_BENCHMARK */
 
 }
