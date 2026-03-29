@@ -13,4 +13,5 @@ target_sources(Mathpp
       modules/floor.cppm
       modules/bit.cppm
       modules/ilogb.cppm
+      modules/ldexp.cppm
 )
