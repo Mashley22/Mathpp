@@ -4,6 +4,10 @@
 #define MATHPP_CHECK(expr) \
   mathpp::check(expr)
 
+#define MATHPP_CHECK_ASSUME(expr) \
+  mathpp::check(expr); \
+  [[assume(expr)]]
+
 #define MATHPP_ALL_ARITHMETIC_TYPES \
   float, double, long double, \
   int, unsigned int, \

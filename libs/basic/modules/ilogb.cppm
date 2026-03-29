@@ -38,4 +38,14 @@ ilogb(T x) MATHPP_NOEXCEPT {
   return biasedExp - floating_point_traits<T>::exponent_bias;
 }
 
+/**
+ *@brief a more nicely named wrapper for ilogb
+*/
+template<floating_point T>
+[[nodiscard]] MATHPP_CONST_FUNC
+constexpr int
+unbiased_exponent(T x) MATHPP_NOEXCEPT {
+  return ilogb(x);
+}
+
 }
