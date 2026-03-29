@@ -74,6 +74,13 @@ endif()
 
 if(MATHPP_PERF_VAL)
   add_compile_definitions(MATHPP_PERF_VAL)
+
+  if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -fno-math-errno")
+  endif()
+
   include(CheckIPOSupported)
   check_ipo_supported(RESULT supported OUTPUT error)
 
@@ -83,13 +90,7 @@ if(MATHPP_PERF_VAL)
   else()
     message(STATUS "IPO / LTO not supported: <${error}>")
   endif()
-
-  if(MSVC)
-    add_compile_options("/Ox")
-  else()
-    add_compile_options("-O3")
-  endif()
-
+  
   if(MATHPP_PERF_VAL_AS_BENCHMARK)
     add_compile_definitions(MATHPP_PERF_VAL_AS_BENCHMARK)
   endif()

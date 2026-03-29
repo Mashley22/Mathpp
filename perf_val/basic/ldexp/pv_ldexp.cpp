@@ -12,11 +12,13 @@ import Mathpp_pv_utils;
 
 import Mathpp;
 
-#define NUM_COUNT 2000
+#define NUM_COUNT 1000
 #define RUN_COUNT 1000 * RUNTIME_SCALE
 
 #define LOWER_BOUND -1000
 #define UPPER_BOUND 1000
+
+#define EXPONENT 10
 
 namespace mathpp {
 
@@ -29,10 +31,10 @@ pv_utils::Timer timer;
 template<typename T>
 BENCHPP_BENCHMARK_FUNC
 void
-stdIlogb(const std::array<T, NUM_COUNT>& arr) {
+stdLdexp(const std::array<T, NUM_COUNT>& arr) {
   timer.std.start();
   for (const auto& v : arr) {
-    volatile int val = std::ilogb(v);
+    volatile T val = std::ldexp(v, EXPONENT);
     (void)val;
   }
   timer.std.stop();
@@ -42,10 +44,10 @@ stdIlogb(const std::array<T, NUM_COUNT>& arr) {
 template<typename T>
 BENCHPP_BENCHMARK_FUNC
 void
-mathppIlogb(const std::array<T, NUM_COUNT>& arr) {
+mathppLdexp(const std::array<T, NUM_COUNT>& arr) {
   timer.mathpp.start();
   for (const auto& v : arr) {
-    volatile int val = mathpp::ilogb(v);
+    volatile T val = mathpp::ldexp(v, EXPONENT);
     (void)val;
   }
   timer.mathpp.stop();
@@ -55,17 +57,18 @@ mathppIlogb(const std::array<T, NUM_COUNT>& arr) {
 template<typename T>
 void
 runValidations(void) {
+
   timer.clear();
 
   std::array<T, NUM_COUNT> randArr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
 
   for (const auto& v : randArr) {
-    REQUIRE(isNearlyEqual(std::ilogb(v), mathpp::ilogb(v)));
+    REQUIRE(isNearlyEqualRel(std::ldexp(v, EXPONENT), mathpp::ldexp(v, EXPONENT), std::numeric_limits<T>::epsilon()));
   }
 
   for (std::size_t i = 0; i < RUN_COUNT; i++) {
-    stdIlogb(randArr);
-    mathppIlogb(randArr);
+    stdLdexp(randArr);
+    mathppLdexp(randArr);
   }
 
   REQUIRE(timer.cmpTimesWithinTolerance(TOLERANCE));
@@ -73,10 +76,9 @@ runValidations(void) {
 
 }
 
-TEST_CASE( "ilogb", "[basic][ilogb]" ) {
-  runValidations<float64>();
+TEST_CASE( "ldexp", "[basic][ldexp]" ) {
   runValidations<float32>();
-  // no long double ... :(
+  runValidations<float64>();
 }
 
 #else
@@ -86,11 +88,11 @@ namespace {
 template<typename T, benchpp::Timer& timer>
 BENCHPP_BENCHMARK_FUNC
 void
-stdIlogb(void){
+stdLdexp(void){
   std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
   timer.start();
   for (const auto& v : arr) {
-    volatile int val = std::ilogb(v);
+    volatile T val = std::ldexp(v, EXPONENT);
     (void)val;
   }
   timer.stop();
@@ -100,60 +102,60 @@ stdIlogb(void){
 template<typename T, benchpp::Timer& timer>
 BENCHPP_BENCHMARK_FUNC
 void
-mathppIlogb(void){
+mathppLdexp(void){
   std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
   timer.start();
   for (const auto& v : arr) {
-    volatile int val = mathpp::ilogb(v);
+    volatile T val = mathpp::ldexp(v, EXPONENT);
     (void)val;
   }
   timer.stop();
   timer.recordAndReset();
 }
 
-benchpp::Timer stdIlogb_f32Timer;
-benchpp::Timer stdIlogb_f64Timer;
-benchpp::Timer mathppIlogb_f32Timer;
-benchpp::Timer mathppIlogb_f64Timer;
+benchpp::Timer stdLdexp_f32Timer;
+benchpp::Timer stdLdexp_f64Timer;
+benchpp::Timer mathppLdexp_f32Timer;
+benchpp::Timer mathppLdexp_f64Timer;
 
-benchpp::BenchmarkInfo stdIlogb_f32 = {
-  .name = "std_ilogb",
+benchpp::BenchmarkInfo stdLdexp_f32 = {
+  .name = "std_ldexp",
   .group = "std_f32",
-  .function = &stdIlogb<float32, stdIlogb_f32Timer>,
+  .function = &stdLdexp<float32, stdLdexp_f32Timer>,
   .runNum = RUN_COUNT,
-  .p_timer = &stdIlogb_f32Timer
+  .p_timer = &stdLdexp_f32Timer
 };
 
-benchpp::BenchmarkInfo stdIlogb_f64 = {
-  .name = "std_ilogb",
+benchpp::BenchmarkInfo stdLdexp_f64 = {
+  .name = "std_ldexp",
   .group = "std_f64",
-  .function = &stdIlogb<float64, stdIlogb_f64Timer>,
+  .function = &stdLdexp<float64, stdLdexp_f64Timer>,
   .runNum = RUN_COUNT,
-  .p_timer = &stdIlogb_f64Timer
+  .p_timer = &stdLdexp_f64Timer
 };
 
-benchpp::BenchmarkInfo mathppIlogb_f32 = {
-  .name = "mathpp_ilogb",
+benchpp::BenchmarkInfo mathppLdexp_f32 = {
+  .name = "mathpp_ldexp",
   .group = "mathpp_f32",
-  .function = &mathppIlogb<float32, mathppIlogb_f32Timer>,
+  .function = &mathppLdexp<float32, mathppLdexp_f32Timer>,
   .runNum = RUN_COUNT,
-  .p_timer = &mathppIlogb_f32Timer
+  .p_timer = &mathppLdexp_f32Timer
 };
 
-benchpp::BenchmarkInfo mathppIlogb_f64 = {
-  .name = "mathpp_ilogb",
+benchpp::BenchmarkInfo mathppLdexp_f64 = {
+  .name = "mathpp_ldexp",
   .group = "mathpp_f64",
-  .function = &mathppIlogb<float64, mathppIlogb_f64Timer>,
+  .function = &mathppLdexp<float64, mathppLdexp_f64Timer>,
   .runNum = RUN_COUNT,
-  .p_timer = &mathppIlogb_f64Timer
+  .p_timer = &mathppLdexp_f64Timer
 };
 
 }
 
-REGISTER_BENCHMARK(stdIlogb_f32);
-REGISTER_BENCHMARK(stdIlogb_f64);
-REGISTER_BENCHMARK(mathppIlogb_f32);
-REGISTER_BENCHMARK(mathppIlogb_f64);
+REGISTER_BENCHMARK(stdLdexp_f32);
+REGISTER_BENCHMARK(stdLdexp_f64);
+REGISTER_BENCHMARK(mathppLdexp_f32);
+REGISTER_BENCHMARK(mathppLdexp_f64);
 
 #endif /* MATHPP_PERF_VAL_AS_BENCHMARK */
 

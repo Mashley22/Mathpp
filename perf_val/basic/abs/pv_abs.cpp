@@ -1,6 +1,5 @@
 #include <array>
 #include <cmath>
-#include <random>
 
 #ifndef MATHPP_PERF_VAL_AS_BENCHMARK
 #include <catch2/catch_all.hpp>
@@ -20,6 +19,8 @@ import Mathpp;
 #define UPPER_BOUND 1000
 
 namespace mathpp {
+
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK 
 
 namespace {
 
@@ -50,12 +51,6 @@ mathppAbs(const std::array<T, NUM_COUNT>& arr) {
   timer.mathpp.stop();
   timer.mathpp.recordAndReset();
 }
-
-}
-
-#ifndef MATHPP_PERF_VAL_AS_BENCHMARK 
-
-namespace {
 
 template<typename T>
 void

@@ -21,6 +21,8 @@ import Mathpp;
 
 namespace mathpp {
 
+#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
+
 namespace {
 
 pv_utils::Timer timer;
@@ -50,12 +52,6 @@ mathppTrunc(const std::array<T, NUM_COUNT>& arr) {
   timer.mathpp.stop();
   timer.mathpp.recordAndReset();
 }
-
-}
-
-#ifndef MATHPP_PERF_VAL_AS_BENCHMARK
-
-namespace {
 
 template<typename T>
 void
