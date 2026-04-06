@@ -74,6 +74,7 @@ endif()
 
 if(MATHPP_PERF_VAL)
   add_compile_definitions(MATHPP_PERF_VAL)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 
   if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox")

@@ -27,9 +27,16 @@ Focusing on floating point support for float and double using the iec559([IEEE75
 - add as subdirectory then using target_link_libraries link against Mathpp
 - in general the library uses a float32/64 type, this should typically be an alias to either float or double/std::float32 etc. some functions are agnostic some aren't.
 
-## Performance validation
+## Unit tests
 
-Provided as a test suite, with a build script in build/perf_val directory, using ctest you can run all of them at once.
+- generate using the bash script provided: build/validation/build.sh (defaults to ninja for c++ modules since at the time of writing make doesn't support them as a cmake generator, and uses clang if available, also generating the compilation database)
+- compile an run using ctest
+
+## Performance validation and Benchmarking
+
+- build either as a test suite (build/validation/build.sh) or as a set of benchmarks (build/validation/benchmark.sh)
+- run the test suite with ctest or the executable bin/Benchmarks, run with -a to run all.
+
 In general the performance tolerance is such that the mean performance is within statistical signficance of the stl.
 Individual tests may fail due to statistical variances.
 Will eventually provide a way to have more controls on this, i.e. run control, tolerance.
