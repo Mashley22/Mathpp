@@ -16,7 +16,7 @@ This document contains performance benchmarking data comparing `mathpp` implemen
 - **CPU:**: Ryzen 5 7640U
 - **RAM:**: 16GB DDR5
 - **OS**: Linux 6.19.6
-- **Commit**: 7e16e3b554a4802ee84dc901553c7f5986c275f2
+- **Commit**: d45d9002ff403c3877090322d5d765dbf43b1581
 - **Compiler**: clang 21.1.8
 - **Compiler options:** run using gnu++23, O3 with flto=thin (cmake ipo default for clang), no-trapping-math, no-round-math and no-math-errno
 
@@ -87,12 +87,12 @@ This document contains performance benchmarking data comparing `mathpp` implemen
 
 | Implementation | Mean | Std Dev | Min | Max | Median |
 |---|---|---|---|---|---|
-| std_f32 | 3656.59 | 367.90 | 3466 | 19036 | 3697 |
-| mathpp_f32 | 482.21 | 241.06 | 440 | 6102 | 461 |
-| std_f64 | 3727.22 | 1799.54 | 3396 | 31720 | 3627 |
-| mathpp_f64 | 468.36 | 106.69 | 441 | 7224 | 461 |
+| std_f32 | 3706.92 | 2076.59 | 3466 | 54232 | 3476 |
+| mathpp_f32 | 516.03 | 167.06 | 470 | 4829 | 501 |
+| std_f64 | 3676.05 | 1639.17 | 3546 | 59702 | 3577 |
+| mathpp_f64 | 514.96 | 134.70 | 481 | 4688 | 510 |
 
-**Summary**: mathpp shows exceptional performance: **86.8% faster** for f32 and **87.4% faster** for f64.
+**Summary**: mathpp shows exceptional performance: **86% faster** for f32 and **86% faster** for f64.
 
 ## Performance Summary
 
