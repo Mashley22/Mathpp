@@ -56,6 +56,8 @@ function(add_perf_val TEST_NAME)
     PRIVATE
       ${PEDANTIC_COMPILE_OPTIONS}
       ${MATHPP_SAFE_FAST_MATH}
+      -Wno-c2y-extensions
+      -Wno-double-promotion # since some catch2 issues 
   )
 
   if(MATHPP_PERF_VAL_AS_BENCHMARK)

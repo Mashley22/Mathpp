@@ -118,32 +118,32 @@ benchpp::Timer mathppTrunc_f32Timer;
 benchpp::Timer mathppTrunc_f64Timer;
 
 benchpp::BenchmarkInfo stdTrunc_f32 = {
-  .name = "std_trunc",
-  .group = "std_f32",
+  .name = "std_trunc32",
+  .group = "trunc",
   .function = &stdTrunc<float32, stdTrunc_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdTrunc_f32Timer
 };
 
 benchpp::BenchmarkInfo stdTrunc_f64 = {
-  .name = "std_trunc",
-  .group = "std_f64",
+  .name = "std_trunc64",
+  .group = "trunc",
   .function = &stdTrunc<float64, stdTrunc_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdTrunc_f64Timer
 };
 
 benchpp::BenchmarkInfo mathppTrunc_f32 = {
-  .name = "mathpp_trunc",
-  .group = "mathpp_f32",
+  .name = "mathpp_trunc32",
+  .group = "trunc",
   .function = &mathppTrunc<float32, mathppTrunc_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppTrunc_f32Timer
 };
 
 benchpp::BenchmarkInfo mathppTrunc_f64 = {
-  .name = "mathpp_trunc",
-  .group = "mathpp_f64",
+  .name = "mathpp_trunc64",
+  .group = "trunc",
   .function = &mathppTrunc<float64, mathppTrunc_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppTrunc_f64Timer

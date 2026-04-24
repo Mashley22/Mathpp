@@ -119,32 +119,32 @@ benchpp::Timer mathppLdexp_f32Timer;
 benchpp::Timer mathppLdexp_f64Timer;
 
 benchpp::BenchmarkInfo stdLdexp_f32 = {
-  .name = "std_ldexp",
-  .group = "std_f32",
+  .name = "std_ldexp32",
+  .group = "ldexp",
   .function = &stdLdexp<float32, stdLdexp_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdLdexp_f32Timer
 };
 
 benchpp::BenchmarkInfo stdLdexp_f64 = {
-  .name = "std_ldexp",
-  .group = "std_f64",
+  .name = "std_ldexp64",
+  .group = "ldexp",
   .function = &stdLdexp<float64, stdLdexp_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdLdexp_f64Timer
 };
 
 benchpp::BenchmarkInfo mathppLdexp_f32 = {
-  .name = "mathpp_ldexp",
-  .group = "mathpp_f32",
+  .name = "mathpp_ldexp32",
+  .group = "ldexp",
   .function = &mathppLdexp<float32, mathppLdexp_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppLdexp_f32Timer
 };
 
 benchpp::BenchmarkInfo mathppLdexp_f64 = {
-  .name = "mathpp_ldexp",
-  .group = "mathpp_f64",
+  .name = "mathpp_ldexp64",
+  .group = "ldexp",
   .function = &mathppLdexp<float64, mathppLdexp_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppLdexp_f64Timer

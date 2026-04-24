@@ -117,32 +117,32 @@ benchpp::Timer mathppFloor_f32Timer;
 benchpp::Timer mathppFloor_f64Timer;
 
 benchpp::BenchmarkInfo stdFloor_f32 = {
-  .name = "std_floor",
-  .group = "std_f32",
+  .name = "std_floor32",
+  .group = "floor",
   .function = &stdFloor<float32, stdFloor_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdFloor_f32Timer
 };
 
 benchpp::BenchmarkInfo stdFloor_f64 = {
-  .name = "std_floor",
-  .group = "std_f64",
+  .name = "std_floor64",
+  .group = "floor",
   .function = &stdFloor<float64, stdFloor_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdFloor_f64Timer
 };
 
 benchpp::BenchmarkInfo mathppFloor_f32 = {
-  .name = "mathpp_floor",
-  .group = "mathpp_f32",
+  .name = "mathpp_floor32",
+  .group = "floor",
   .function = &mathppFloor<float32, mathppFloor_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppFloor_f32Timer
 };
 
 benchpp::BenchmarkInfo mathppFloor_f64 = {
-  .name = "mathpp_floor",
-  .group = "mathpp_f64",
+  .name = "mathpp_floor64",
+  .group = "floor",
   .function = &mathppFloor<float64, mathppFloor_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppFloor_f64Timer

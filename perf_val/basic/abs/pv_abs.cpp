@@ -123,32 +123,32 @@ benchpp::Timer mathppAbs_f32Timer;
 benchpp::Timer mathppAbs_f64Timer;
 
 benchpp::BenchmarkInfo stdAbs_f32 = {
-  .name = "std_abs",
-  .group = "std_f32",
+  .name = "std_abs32",
+  .group = "abs",
   .function = &stdAbs<float32, stdAbs_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdAbs_f32Timer
 };
 
 benchpp::BenchmarkInfo stdAbs_f64 = {
-  .name = "std_abs",
-  .group = "std_f64",
+  .name = "std_abs32",
+  .group = "abs",
   .function = &stdAbs<float64, stdAbs_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdAbs_f64Timer
 };
 
 benchpp::BenchmarkInfo mathppAbs_f32 = {
-  .name = "mathpp_abs",
-  .group = "mathpp_f32",
+  .name = "mathpp_abs32",
+  .group = "abs",
   .function = &mathppAbs<float32, mathppAbs_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppAbs_f32Timer
 };
 
 benchpp::BenchmarkInfo mathppAbs_f64 = {
-  .name = "mathpp_abs",
-  .group = "mathpp_f64",
+  .name = "mathpp_abs64",
+  .group = "abs",
   .function = &mathppAbs<float64, mathppAbs_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppAbs_f64Timer

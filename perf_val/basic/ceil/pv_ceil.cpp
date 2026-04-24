@@ -117,32 +117,32 @@ benchpp::Timer mathppCeil_f32Timer;
 benchpp::Timer mathppCeil_f64Timer;
 
 benchpp::BenchmarkInfo stdCeil_f32 = {
-  .name = "std_ceil",
-  .group = "std_f32",
+  .name = "std_ceil32",
+  .group = "ceil",
   .function = &stdCeil<float32, stdCeil_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdCeil_f32Timer
 };
 
 benchpp::BenchmarkInfo stdCeil_f64 = {
-  .name = "std_ceil",
-  .group = "std_f64",
+  .name = "std_ceil64",
+  .group = "ceil",
   .function = &stdCeil<float64, stdCeil_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdCeil_f64Timer
 };
 
 benchpp::BenchmarkInfo mathppCeil_f32 = {
-  .name = "mathpp_ceil",
-  .group = "mathpp_f32",
+  .name = "mathpp_ceil32",
+  .group = "ceil",
   .function = &mathppCeil<float32, mathppCeil_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppCeil_f32Timer
 };
 
 benchpp::BenchmarkInfo mathppCeil_f64 = {
-  .name = "mathpp_ceil",
-  .group = "mathpp_f64",
+  .name = "mathpp_ceil64",
+  .group = "ceil",
   .function = &mathppCeil<float64, mathppCeil_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppCeil_f64Timer

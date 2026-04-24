@@ -129,32 +129,32 @@ benchpp::Timer mathpp{func_name_pascal}_f32Timer;
 benchpp::Timer mathpp{func_name_pascal}_f64Timer;
 
 benchpp::BenchmarkInfo std{func_name_pascal}_f32 = {{
-  .name = "std_{func_name}",
-  .group = "std_f32",
+  .name = "std_{func_name}32",
+  .group = "{func_name}",
   .function = &std{func_name_pascal}<float32, std{func_name_pascal}_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &std{func_name_pascal}_f32Timer
 }};
 
 benchpp::BenchmarkInfo std{func_name_pascal}_f64 = {{
-  .name = "std_{func_name}",
-  .group = "std_f64",
+  .name = "std_{func_name}64",
+  .group = "{func_name}",
   .function = &std{func_name_pascal}<float64, std{func_name_pascal}_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &std{func_name_pascal}_f64Timer
 }};
 
 benchpp::BenchmarkInfo mathpp{func_name_pascal}_f32 = {{
-  .name = "mathpp_{func_name}",
-  .group = "mathpp_f32",
+  .name = "mathpp_{func_name}32",
+  .group = "{func_name}",
   .function = &mathpp{func_name_pascal}<float32, mathpp{func_name_pascal}_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathpp{func_name_pascal}_f32Timer
 }};
 
 benchpp::BenchmarkInfo mathpp{func_name_pascal}_f64 = {{
-  .name = "mathpp_{func_name}",
-  .group = "mathpp_f64",
+  .name = "mathpp_{func_name}64",
+  .group = "{func_name}",
   .function = &mathpp{func_name_pascal}<float64, mathpp{func_name_pascal}_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathpp{func_name_pascal}_f64Timer

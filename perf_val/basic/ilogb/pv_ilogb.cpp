@@ -117,32 +117,32 @@ benchpp::Timer mathppIlogb_f32Timer;
 benchpp::Timer mathppIlogb_f64Timer;
 
 benchpp::BenchmarkInfo stdIlogb_f32 = {
-  .name = "std_ilogb",
-  .group = "std_f32",
+  .name = "std_ilogb32",
+  .group = "ilogb",
   .function = &stdIlogb<float32, stdIlogb_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdIlogb_f32Timer
 };
 
 benchpp::BenchmarkInfo stdIlogb_f64 = {
-  .name = "std_ilogb",
-  .group = "std_f64",
+  .name = "std_ilogb64",
+  .group = "ilogb",
   .function = &stdIlogb<float64, stdIlogb_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &stdIlogb_f64Timer
 };
 
 benchpp::BenchmarkInfo mathppIlogb_f32 = {
-  .name = "mathpp_ilogb",
-  .group = "mathpp_f32",
+  .name = "mathpp_ilogb32",
+  .group = "ilogb",
   .function = &mathppIlogb<float32, mathppIlogb_f32Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppIlogb_f32Timer
 };
 
 benchpp::BenchmarkInfo mathppIlogb_f64 = {
-  .name = "mathpp_ilogb",
-  .group = "mathpp_f64",
+  .name = "mathpp_ilogb64",
+  .group = "ilogb",
   .function = &mathppIlogb<float64, mathppIlogb_f64Timer>,
   .runNum = RUN_COUNT,
   .p_timer = &mathppIlogb_f64Timer
