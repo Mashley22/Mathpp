@@ -18,7 +18,8 @@ import Mathpp;
 #define LOWER_BOUND -1000
 #define UPPER_BOUND 1000
 
-#define EXPONENT 10
+#define EXPONENT_UPPER 10
+#define EXPONENT_LOWER -10
 
 namespace mathpp {
 
@@ -31,10 +32,10 @@ pv_utils::Timer timer;
 template<typename T>
 BENCHPP_BENCHMARK_FUNC
 void
-stdLdexp(const std::array<T, NUM_COUNT>& arr) {
+stdLdexp(const std::array<T, NUM_COUNT>& values, const std::array<int, NUM_COUNT>& exponents) {
   timer.std.start();
-  for (const auto& v : arr) {
-    volatile T val = std::ldexp(v, EXPONENT);
+  for (std::size_t i = 0; i < NUM_COUNT; i++) {
+    volatile T val = std::ldexp(values[i], exponents[i]);
     (void)val;
   }
   timer.std.stop();
@@ -44,10 +45,10 @@ stdLdexp(const std::array<T, NUM_COUNT>& arr) {
 template<typename T>
 BENCHPP_BENCHMARK_FUNC
 void
-mathppLdexp(const std::array<T, NUM_COUNT>& arr) {
+mathppLdexp(const std::array<T, NUM_COUNT>& values, const std::array<int, NUM_COUNT>& exponents) {
   timer.mathpp.start();
-  for (const auto& v : arr) {
-    volatile T val = mathpp::ldexp(v, EXPONENT);
+  for (std::size_t i = 0; i < NUM_COUNT; i++) {
+    volatile T val = mathpp::ldexp(values[i], exponents[i]);
     (void)val;
   }
   timer.mathpp.stop();
@@ -60,17 +61,18 @@ runValidations(void) {
 
   timer.clear();
 
-  std::array<T, NUM_COUNT> randArr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  std::array<T, NUM_COUNT> values = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  std::array<int, NUM_COUNT> exponents = pv_utils::generateRandomArray<int, NUM_COUNT>(EXPONENT_LOWER, EXPONENT_UPPER);
 
-  for (const auto& v : randArr) {
-    REQUIRE(isNearlyEqualRel(std::ldexp(v, EXPONENT), mathpp::ldexp(v, EXPONENT), std::numeric_limits<T>::epsilon()));
+  for (std::size_t i = 0; i < NUM_COUNT; i++) {
+    REQUIRE(isNearlyEqualRel(std::ldexp(values[i], exponents[i]), mathpp::ldexp(values[i], exponents[i]), std::numeric_limits<T>::epsilon()));
   }
 
   for (std::size_t i = 0; i < RUN_COUNT; i++) {
-    stdLdexp(randArr);
-    mathppLdexp(randArr);
+    stdLdexp(values, exponents);
+    mathppLdexp(values, exponents);
   }
-
+  
   REQUIRE(timer.cmpTimesWithinTolerance(TOLERANCE));
 }
 
@@ -89,10 +91,11 @@ template<typename T, benchpp::Timer& timer>
 BENCHPP_BENCHMARK_FUNC
 void
 stdLdexp(void){
-  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  std::array<T, NUM_COUNT> values = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  std::array<int, NUM_COUNT> exponents = pv_utils::generateRandomArray<int, NUM_COUNT>(EXPONENT_LOWER, EXPONENT_UPPER);
   timer.start();
-  for (const auto& v : arr) {
-    volatile T val = std::ldexp(v, EXPONENT);
+  for (std::size_t i = 0; i < NUM_COUNT; i++) {
+    volatile T val = std::ldexp(values[i], exponents[i]);
     (void)val;
   }
   timer.stop();
@@ -103,10 +106,11 @@ template<typename T, benchpp::Timer& timer>
 BENCHPP_BENCHMARK_FUNC
 void
 mathppLdexp(void){
-  std::array<T, NUM_COUNT> arr = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  std::array<T, NUM_COUNT> values = pv_utils::generateRandomArray<T, NUM_COUNT>(LOWER_BOUND, UPPER_BOUND);
+  std::array<int, NUM_COUNT> exponents = pv_utils::generateRandomArray<int, NUM_COUNT>(EXPONENT_LOWER, EXPONENT_UPPER);
   timer.start();
-  for (const auto& v : arr) {
-    volatile T val = mathpp::ldexp(v, EXPONENT);
+  for (std::size_t i = 0; i < NUM_COUNT; i++) {
+    volatile T val = mathpp::ldexp(values[i], exponents[i]);
     (void)val;
   }
   timer.stop();
