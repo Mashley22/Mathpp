@@ -51,6 +51,8 @@ struct iec559_traits<float32> {
   static constexpr int raw_exponent_max = 255;
   static constexpr int subnormal_exponent = -126;
 
+  static constexpr float32 epsilon = 0x1p-23;
+
   static constexpr uint_type sign_mask     = 0x80000000U; 
   static constexpr uint_type exponent_mask = 0x7F800000U; 
   static constexpr uint_type mantissa_mask = 0x007FFFFFU; 
@@ -71,6 +73,8 @@ struct iec559_traits<float64> {
   static constexpr int max_exponent = 1023;
   static constexpr int raw_exponent_max = 2047;
   static constexpr int subnormal_exponent = -1022;
+
+  static constexpr float64 epsilon = 0x1p-52;
 
   static constexpr uint_type sign_mask     = 0x8000000000000000ULL; 
   static constexpr uint_type exponent_mask = 0x7FF0000000000000ULL; 
