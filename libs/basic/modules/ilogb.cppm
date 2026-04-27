@@ -23,7 +23,7 @@ template<floating_point T>
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr int 
 ilogb(T x) MATHPP_NOEXCEPT {
-  MATHPP_CHECK(!std::isnan(x));
+  MATHPP_CHECK(!isnan(x));
 
   if (x == 0) {
     return 0;

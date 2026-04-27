@@ -1,13 +1,17 @@
 module;
 
 #include <bit>
-#include <cmath>
 
 #include <Mathpp/macros.hpp>
 
 export module Mathpp.basic:ldexp;
 
 import Mathpp.common;
+
+#define LDEXP_ERROR_CASES(val) \
+  if (val == static_cast<T>(0) || isnan(val) || isinf(val)) { \
+    return val; \
+  }
 
 export namespace mathpp {
 
@@ -18,9 +22,7 @@ template<floating_point T>
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr T
 ldexp(T val, int exp) MATHPP_NOEXCEPT {
-  if (val == T(0)) {
-    return 0;
-  }
+  LDEXP_ERROR_CASES(val);
 
   using Uint_t = MatchUnsignedWidth_t<T>;
   

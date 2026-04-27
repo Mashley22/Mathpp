@@ -127,5 +127,20 @@ mantissa(T val) MATHPP_NOEXCEPT {
   return static_cast<MatchUnsignedWidth_t<T>>(bits & floating_point_traits<T>::mantissa_mask);
 }
 
+template<floating_point T>
+[[nodiscard]] MATHPP_CONST_FUNC
+constexpr bool
+isnan(T val) MATHPP_NOEXCEPT {
+  return val != val;
+}
+
+template<floating_point T>
+[[nodiscard]] MATHPP_CONST_FUNC
+constexpr bool
+isinf(T val) MATHPP_NOEXCEPT {
+  return val == std::numeric_limits<T>::infinity() ||
+         val == -std::numeric_limits<T>::infinity();
+}
+
 
 }
