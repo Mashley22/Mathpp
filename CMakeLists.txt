@@ -65,10 +65,13 @@ target_compile_options(Mathpp
 
 if(MATHPP_UNIT_TEST)
   add_compile_definitions(MATHPP_UNIT_TEST)
-  set(CMAKE_BUILD_TYPE "Debug")
   target_compile_options(Mathpp
     PRIVATE 
       ${PEDANTIC_COMPILE_OPTIONS}
+  )
+  target_compile_definitions(Mathpp
+    PRIVATE
+      DEBUG
   )
 endif()
 
