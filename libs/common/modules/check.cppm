@@ -2,7 +2,13 @@ module;
 
 #include <source_location>
 #include <string>
-#include <exception>
+
+#ifdef NDEBUG
+#ifndef MATHPP_UNIT_TEST
+#include <iostream>
+#include <cstdlib>
+#endif
+#endif
 
 export module Mathpp.common:check;
 
@@ -14,19 +20,17 @@ struct CheckFail {
 };
 
 constexpr void
-check(bool expr,
-      std::string&& msg = {},
-      std::source_location loc = std::source_location::current()) {
-#ifdef NDEBUG
-  (void)expr;
-  (void)msg;
-  (void)loc;
-#else 
+check([[maybe_unused]] bool expr,
+      [[maybe_unused]] std::string&& msg = {},
+      [[maybe_unused]] std::source_location loc = std::source_location::current()) {
+#ifndef NDEBUG
   if (!expr) {
 #ifndef MATHPP_UNIT_TEST
-    (void)msg;
-    (void)loc;
-    std::terminate();
+    std::cerr << "ASSERTION FAILED: " << message << "\n"
+              << "File: " << location.file_name() << "\n"
+              << "Line: " << location.line() << ":" << location.column() << "\n"
+              << "Function: " << location.function_name() << std::endl;
+    std::abort();
 #else 
     throw CheckFail{.msg = msg, .loc = loc};
 #endif 

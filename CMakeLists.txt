@@ -69,10 +69,6 @@ if(MATHPP_UNIT_TEST)
     PRIVATE 
       ${PEDANTIC_COMPILE_OPTIONS}
   )
-  target_compile_definitions(Mathpp
-    PRIVATE
-      DEBUG
-  )
 endif()
 
 if(MATHPP_PERF_VAL)
