@@ -11,3 +11,4 @@ export import :floor;
 export import :bit;
 export import :ilogb;
 export import :ldexp;
+export import :fmod;
