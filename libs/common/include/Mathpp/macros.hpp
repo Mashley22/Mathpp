@@ -1,12 +1,32 @@
 #ifndef MATHPP_MACROS_HPP
 #define MATHPP_MACROS_HPP
 
-#define MATHPP_CHECK(expr) \
+#define MATHPP_CHECK_DISPATCHER(_1, _2, NAME, ...) NAME
+
+#define MATHPP_CHECK_ASSUME_DISPATCHER(_1, _2, NAME, ...) NAME
+
+#define MATHPP_ASSUME(expr) \
+  do{ bool mathpp_impl_assume_temp_variable = (expr); [[assume(mathpp_impl_assume_temp_variable)]]; }while(0)
+
+#define MATHPP_CHECK_EXPR_ONLY(expr) \
   mathpp::check(expr)
 
-#define MATHPP_CHECK_ASSUME(expr) \
+#define MATHPP_CHECK_WITH_MSG(expr, msg) \
+  mathpp::check(expr, msg)
+
+#define MATHPP_CHECK_ASSUME_EXPR_ONLY(expr) \
   mathpp::check(expr); \
-  [[assume(expr)]]
+  MATHPP_ASSUME(expr)
+
+#define MATHPP_CHECK_ASSUME_WITH_MSG(expr, msg) \
+  mathpp::check(expr, msg); \
+  MATHPP_ASSUME(expr)
+
+#define MATHPP_CHECK(...) \
+  MATHPP_CHECK_DISPATCHER(__VA_ARGS__, MATHPP_CHECK_WITH_MSG, MATHPP_CHECK_EXPR_ONLY)(__VA_ARGS__)
+
+#define MATHPP_CHECK_ASSUME(...) \
+  MATHPP_CHECK_ASSUME_DISPATCHER(__VA_ARGS__, MATHPP_CHECK_ASSUME_WITH_MSG, MATHPP_CHECK_ASSUME_EXPR_ONLY)(__VA_ARGS__)
 
 #define MATHPP_ALL_ARITHMETIC_TYPES \
   float, double, long double, \
