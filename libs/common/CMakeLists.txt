@@ -6,6 +6,7 @@ target_sources(Mathpp
       modules/check.cppm
       modules/traits.cppm
       modules/floating_point.cppm
+      modules/err_policy.cppm
       common.cppm
 )
 
