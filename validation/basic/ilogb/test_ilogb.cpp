@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include <catch2/catch_all.hpp>
 
 import Mathpp.basic;
@@ -7,10 +9,26 @@ namespace mathpp {
 
 using namespace mathpp::literals;
 
-TEST_CASE( "", "[trunc][basic]" ) {
+namespace {
+
+template<floating_point T>
+constexpr void
+ilogbIec559Errors(void) {
+  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(std::numeric_limits<T>::infinity()) == INT_MAX);
+  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(-std::numeric_limits<T>::infinity()) == INT_MAX);
+
+  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(std::numeric_limits<T>::quiet_NaN()) == FP_ILOGBNAN);
+
+  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(std::numeric_limits<T>::signaling_NaN()) == FP_ILOGBNAN);
+
+  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(0) == FP_ILOGB0);
+
+  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(-0) == FP_ILOGB0);
+}
+
+TEST_CASE( "ilogb", "[basic][ilogb]" ) {
 
   SECTION( "float64" ) {
-    STATIC_REQUIRE(ilogb(0_f64) == 0);
     STATIC_REQUIRE(ilogb(1e100_f64) == 332);
     STATIC_REQUIRE(ilogb(1e-100_f64) == -333);
     STATIC_REQUIRE(ilogb(1_f64) == 0);
@@ -18,12 +36,17 @@ TEST_CASE( "", "[trunc][basic]" ) {
   }
 
   SECTION( "float32" ) {
-    STATIC_REQUIRE(ilogb(0_f32) == 0);
-    STATIC_REQUIRE(ilogb(1e50_f32) == 128);
     STATIC_REQUIRE(ilogb(1e-20_f32) == -67);
     STATIC_REQUIRE(ilogb(1_f32) == 0);
     STATIC_REQUIRE(ilogb(2_f32) == 1);
   }
+
+  SECTION( "iec559 error handling" ) {
+    ilogbIec559Errors<float32>();
+    ilogbIec559Errors<float64>();
+  }
+
+}
 
 }
 
