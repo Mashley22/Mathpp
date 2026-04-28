@@ -25,6 +25,20 @@ concept ErrPolicy = Scalar<S> && requires(S val) {
 };
 
 /**
+ *@brief The error policy concept to cover the general 3 types of possible errors, nans, infs, and zeros.
+ *       See \ref GeneralErrPolicySkeleton for a struct to help make this more convenient.
+*/
+template<typename T, typename S>
+concept GeneralErrPolicy = Scalar<S> && requires {
+  typename T::Zero;
+  typename T::Nan;
+  typename T::Inf;
+} && 
+ErrPolicy<typename T::Zero, S> &&
+ErrPolicy<typename T::Nan, S> &&
+ErrPolicy<typename T::Inf, S>;
+
+/**
  *@brief Assumes that a special case does not happen and hence can be ignored.
  *       Does NOT debug assert, for that use \ref ErrPolicyDebugAssert
 */
@@ -65,6 +79,28 @@ struct ErrPolicyPassThrough {
   on_special(S val) MATHPP_NOEXCEPT { return val; }
 };
 
+/**
+ *@brief a struct to make covering the generic 3 types of possible errors easier.
+ *       see \ref GeneralErrPolicy
+ */
+template<Scalar S,
+  ErrPolicy<S> ErrPolicyZero = ErrPolicyPassThrough<S>,
+  ErrPolicy<S> ErrPolicyNan = ErrPolicyPassThrough<S>,
+  ErrPolicy<S> ErrPolicyInf = ErrPolicyPassThrough<S>
+>
+struct GeneralErrPolicySkeleton {
+  using Zero = ErrPolicyZero;
+  using Nan = ErrPolicyNan;
+  using Inf = ErrPolicyInf;
+};
+
+/**
+ *@brief An alias to apply the same error policy over all the three common error types in
+ *       \ref GeneralErrPolicy
+ */
+template<Scalar S, ErrPolicy<S> Policy>
+using EqualErrPolicy = GeneralErrPolicySkeleton<S, Policy, Policy, Policy>;
+
 }
 
 static_assert(mathpp::ErrPolicy<mathpp::ErrPolicyDoNothing<float>, float>);
@@ -73,3 +109,5 @@ static constexpr std::string_view str = "Hello";
 static_assert(mathpp::ErrPolicy<mathpp::ErrPolicyDebugAssert<float, str>, float>);
 
 static_assert(mathpp::ErrPolicy<mathpp::ErrPolicyPassThrough<float>, float>);
+
+static_assert(mathpp::GeneralErrPolicy<mathpp::GeneralErrPolicySkeleton<float>, float>);
