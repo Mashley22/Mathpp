@@ -17,44 +17,44 @@ export namespace mathpp {
  *@brief The error policy concept, the requires check is mostly provided for compatibility
  *       with the \ref ErrPolicyDoNothing
 */
-template<typename T, typename S>
+template<typename T, typename S, typename T_output = S>
 concept ErrPolicy = Scalar<S> && requires(S val) {
   { T::requires_check } -> std::convertible_to<bool>;
 
-  { T::on_special(val) } -> std::same_as<S>;
+  { T::on_special(val) } -> std::same_as<T_output>;
 };
 
 /**
  *@brief The error policy concept to cover the general 3 types of possible errors, nans, infs, and zeros.
  *       See \ref GeneralErrPolicySkeleton for a struct to help make this more convenient.
 */
-template<typename T, typename S>
+template<typename T, typename S, typename T_output = S>
 concept GeneralErrPolicy = Scalar<S> && requires {
   typename T::Zero;
   typename T::Nan;
   typename T::Inf;
 } && 
-ErrPolicy<typename T::Zero, S> &&
-ErrPolicy<typename T::Nan, S> &&
-ErrPolicy<typename T::Inf, S>;
+ErrPolicy<typename T::Zero, S, T_output> &&
+ErrPolicy<typename T::Nan, S, T_output> &&
+ErrPolicy<typename T::Inf, S, T_output>;
 
 /**
  *@brief Assumes that a special case does not happen and hence can be ignored.
  *       Does NOT debug assert, for that use \ref ErrPolicyDebugAssert
 */
-template<Scalar S>
+template<Scalar S, typename T_output = S>
 struct ErrPolicyDoNothing {
   static constexpr bool requires_check = false;
 
-  static MATHPP_CONST_FUNC constexpr S 
-  on_special(S val) MATHPP_NOEXCEPT { return val; }
+  static MATHPP_CONST_FUNC constexpr T_output
+  on_special([[maybe_unused]] S val) MATHPP_NOEXCEPT {}
 
 };
 
 /**
  *@brief Similiar to \ref ErrPolicyDoNothing but adds a debug only assert.
 */
-template<Scalar S, const std::string_view& msg>
+template<Scalar S, const std::string_view& msg, typename T_output = S>
 struct ErrPolicyDebugAssert {
   #ifdef NDEBUG
   static constexpr bool requires_check = false;
@@ -62,7 +62,7 @@ struct ErrPolicyDebugAssert {
   static constexpr bool requires_check = true;
   #endif
 
-  [[noreturn]] static MATHPP_CONST_FUNC constexpr S
+  [[noreturn]] static MATHPP_CONST_FUNC constexpr T_output
   on_special([[maybe_unused]] S val) MATHPP_NOEXCEPT { 
     MATHPP_CHECK(false, std::string(msg));
   }
