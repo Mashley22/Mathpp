@@ -48,10 +48,11 @@ struct Inf {
 /**
  *@brief returns the unbiased exponent value of a floating point number.
  *
- *@returns 0 if the input is 0
- *
- *@note UNDEFINED for nan
- *
+ * Error handling for 0s, nans, and infs is delegated by the error policy,
+ * by default following the returns values in iec559/IEE754:
+ * - 0 returns FP_ILOGB0
+ * - NAN returns FP_ILOGNAN
+ * - infinity returns INT_MAX  
 */
 template<floating_point T,
   GeneralErrPolicy<T, int> ErrHandler = ilogbIec559ErrorPolicy<T>

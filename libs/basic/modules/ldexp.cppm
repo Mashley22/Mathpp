@@ -17,8 +17,9 @@ GeneralErrPolicySkeleton<T, ErrPolicyPassThrough<T>, ErrPolicyPassThrough<T>, Er
 /**
  *@brief returns val multipled by 2 raised to the power of exp
  *
- * Error handling is delegated by the policy, by default following the iec559/IEEE 754:
- * - 0, infs, and nans and just returned straight out.
+ * Error handling for inputs 0s, infs and nans is delegated by the policy,
+ * by default following the iec559/IEEE 754:
+ * 0, infinity and NaN are returned unmodified 
 */
 template<floating_point T,
   GeneralErrPolicy<T> ErrHandler = ldexpIec559ErrorPolicy<T>
