@@ -10,10 +10,6 @@ export module Mathpp.basic:bit;
 
 import Mathpp.common;
 
-#ifndef __has_builtin
-  #define __has_builtin(x)
-#endif 
-
 namespace mathpp::priv {
 
 template<Scalar T>

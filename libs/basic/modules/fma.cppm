@@ -9,10 +9,6 @@ export module Mathpp.basic:fma;
 
 import Mathpp.common;
 
-#ifndef __has_builtin
-  #define __has__builtin(x) 
-#endif
-
 export namespace mathpp {
 
 template<Scalar T>
