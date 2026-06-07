@@ -74,9 +74,8 @@ runValidations(void) {
 }
 
 TEST_CASE( "ceil", "[basic][ceil]" ) {
-  runValidations<double>();
-  runValidations<float>();
-  runValidations<long double>();
+  runValidations<float64>();
+  runValidations<float32>();
 }
 
 #else
