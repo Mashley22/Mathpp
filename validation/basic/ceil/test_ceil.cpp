@@ -13,34 +13,34 @@ namespace {
 
 template<floating_point T>
 constexpr void
-ceilIec559Errors(void) {
+ceilStandardErrors(void) {
   STATIC_REQUIRE(isinf(
-    ceil<T, ceilIec559ErrorPolicy<T>>(
+    ceil<T, CeilErrPolicyStd<T>>(
       std::numeric_limits<T>::infinity()
     )
   ));
 
   STATIC_REQUIRE(isinf(
-    ceil<T, ceilIec559ErrorPolicy<T>>(
+    ceil<T, CeilErrPolicyStd<T>>(
       -std::numeric_limits<T>::infinity()
     )
   ));
 
   STATIC_REQUIRE(isnan(
-    ceil<T, ceilIec559ErrorPolicy<T>>(
+    ceil<T, CeilErrPolicyStd<T>>(
       std::numeric_limits<T>::quiet_NaN()
     )
   ));
 
   STATIC_REQUIRE(isnan(
-    ceil<T, ceilIec559ErrorPolicy<T>>(
+    ceil<T, CeilErrPolicyStd<T>>(
       std::numeric_limits<T>::signaling_NaN()
     )
   ));
 
-  STATIC_REQUIRE(ceil<T, ceilIec559ErrorPolicy<T>>(0) == 0);
+  STATIC_REQUIRE(ceil<T, CeilErrPolicyStd<T>>(0) == 0);
 
-  STATIC_REQUIRE(ceil<T, ceilIec559ErrorPolicy<T>>(-0) == 0);
+  STATIC_REQUIRE(ceil<T, CeilErrPolicyStd<T>>(-0) == 0);
 }
 
 TEST_CASE( "floating point ceil", "[trunc][basic]" ) {
@@ -70,8 +70,8 @@ TEST_CASE( "floating point ceil", "[trunc][basic]" ) {
   }
 
   SECTION( "iec 559 handling" ) {
-    ceilIec559Errors<float32>();
-    ceilIec559Errors<float64>();
+    ceilStandardErrors<float32>();
+    ceilStandardErrors<float64>();
   }
 }
 
