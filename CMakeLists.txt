@@ -15,6 +15,15 @@ add_library(Mathpp)
 option(MATHPP_UNIT_TEST "build the unit tests" OFF)
 option(MATHPP_PERF_VAL "build the performance validations" OFF) 
 option(MATHPP_PERF_VAL_AS_BENCHMARK "build the performance validations as a set of benchmarks" OFF)
+set(MATHPP_ERROR_MODE "STANDARD" CACHE STRING "Select the error handling mode (FAST or STANDARD)")
+
+set_property(CACHE MATHPP_ERROR_MODE PROPERTY STRINGS "FAST" "STANDARD")
+
+if(${MATHPP_ERROR_MODE} STREQUAL "FAST" OR ${MATHPP_ERROR_MODE} STREQUAL "STANDARD")
+  target_compile_definitions(Mathpp PUBLIC "MATHPP_USE_${MATHPP_ERROR_MODE}_ERROR_POLICY")
+else()
+  message(FATAL_ERROR "Invalid MATHPP_ERROR_MODE: ${MATHPP_ERROR_MODE}. Must be FAST or STANDARD.")
+endif()
 
 if(MSVC)
   set(MATHPP_SAFE_FAST_MATH
