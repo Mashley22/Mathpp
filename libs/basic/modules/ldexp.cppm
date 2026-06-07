@@ -1,6 +1,7 @@
 module;
 
 #include <bit>
+#include <string_view>
 
 #include <Mathpp/macros.hpp>
 
@@ -8,21 +9,45 @@ export module Mathpp.basic:ldexp;
 
 import Mathpp.common;
 
+namespace {
+
+[[maybe_unused]] constexpr std::string_view zeroErrMsg = "ldexp zero";
+[[maybe_unused]] constexpr std::string_view nanErrMsg = "ldexp nan";
+[[maybe_unused]] constexpr std::string_view infErrMsg = "ldexp inf";
+
+}
+
 export namespace mathpp {
 
 template<floating_point T>
-using ldexpIec559ErrorPolicy = 
+using LdexpErrPolicyStd = 
 GeneralErrPolicySkeleton<T, ErrPolicyPassThrough<T>, ErrPolicyPassThrough<T>, ErrPolicyPassThrough<T>>;
+
+template<floating_point T>
+using LdexpErrPolicyFast = GeneralErrPolicySkeleton<
+  T, 
+  ErrPolicyDebugAssert<T, zeroErrMsg>,
+  ErrPolicyDebugAssert<T, nanErrMsg>,
+  ErrPolicyDebugAssert<T, infErrMsg>
+>;
+
+template<floating_point T>
+using LdexpErrPolicyDefault = 
+#ifdef MATHPP_USE_STANDARD_ERROR_POLICY
+  LdexpErrPolicyStd<T>;
+#elifdef MATHPP_USE_FAST_ERROR_POLICY
+  LdLdexpErrPolicyFast<T>;
+#endif
 
 /**
  *@brief returns val multipled by 2 raised to the power of exp
  *
  * Error handling for inputs 0s, infs and nans is delegated by the policy,
- * by default following the iec559/IEEE 754:
+ * by default following math.h:
  * 0, infinity and NaN are returned unmodified 
 */
 template<floating_point T,
-  GeneralErrPolicy<T> ErrHandler = ldexpIec559ErrorPolicy<T>
+  GeneralErrPolicy<T> ErrHandler = LdexpErrPolicyDefault<T>
 >
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr T

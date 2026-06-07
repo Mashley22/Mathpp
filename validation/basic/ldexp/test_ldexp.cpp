@@ -12,34 +12,34 @@ namespace {
 
 template<floating_point T>
 constexpr void
-ldexpIec559Errors(void) {
+ldexpStandardErrors(void) {
   STATIC_REQUIRE(isinf(
-    ldexp<T, ldexpIec559ErrorPolicy<T>>(
+    ldexp<T, LdexpErrPolicyStd<T>>(
       std::numeric_limits<T>::infinity(), 1
     )
   ));
 
   STATIC_REQUIRE(isinf(
-    ldexp<T, ldexpIec559ErrorPolicy<T>>(
+    ldexp<T, LdexpErrPolicyStd<T>>(
       -std::numeric_limits<T>::infinity(), 1
     )
   ));
 
   STATIC_REQUIRE(isnan(
-    ldexp<T, ldexpIec559ErrorPolicy<T>>(
+    ldexp<T, LdexpErrPolicyStd<T>>(
       std::numeric_limits<T>::quiet_NaN(), 1
     )
   ));
 
   STATIC_REQUIRE(isnan(
-    ldexp<T, ldexpIec559ErrorPolicy<T>>(
+    ldexp<T, LdexpErrPolicyStd<T>>(
       std::numeric_limits<T>::signaling_NaN(), 1
     )
   ));
 
-  STATIC_REQUIRE(ldexp<T, ldexpIec559ErrorPolicy<T>>(0, 1) == 0);
+  STATIC_REQUIRE(ldexp<T, LdexpErrPolicyStd<T>>(0, 1) == 0);
 
-  STATIC_REQUIRE(ldexp<T, ldexpIec559ErrorPolicy<T>>(-0, 1) == 0);
+  STATIC_REQUIRE(ldexp<T, LdexpErrPolicyStd<T>>(-0, 1) == 0);
 }
 
 TEST_CASE( "floating point ldexp", "[ldexp][basic]" ) {
@@ -98,8 +98,8 @@ TEST_CASE( "floating point ldexp", "[ldexp][basic]" ) {
   }
 
   SECTION( "iec559 error handling" ) {
-    ldexpIec559Errors<float64>();
-    ldexpIec559Errors<float32>();
+    ldexpStandardErrors<float64>();
+    ldexpStandardErrors<float32>();
   }
 
 }
