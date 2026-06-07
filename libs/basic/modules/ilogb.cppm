@@ -1,6 +1,7 @@
 module;
 
 #include <bit>
+#include <string_view>
 #include <math.h>
 #include <limits.h>
 
@@ -10,10 +11,18 @@ export module Mathpp.basic:ilogb;
 
 import Mathpp.common;
 
+namespace {
+
+[[maybe_unused]] constexpr std::string_view zeroErrMsg = "ilogb zero";
+[[maybe_unused]] constexpr std::string_view nanErrMsg = "ilog nan";
+[[maybe_unused]] constexpr std::string_view infErrMsg = "ilogb inf";
+
+}
+
 export namespace mathpp {
 
 template<floating_point T>
-struct ilogbIec559ErrorPolicy {
+struct IlogbErrPolicyStd {
 struct Zero {
   static constexpr bool requires_check = true;
   
@@ -45,17 +54,32 @@ struct Inf {
 };
 };
 
+template<floating_point T>
+struct IlogbErrPolicyFast {
+  using Zero = ErrPolicyDebugAssert<T, zeroErrMsg, int>;
+  using Nan = ErrPolicyDebugAssert<T, nanErrMsg, int>;
+  using Inf = ErrPolicyDebugAssert<T, infErrMsg, int>;
+};
+
+template<floating_point T>
+using IlogbErrPolicyDefault = 
+#ifdef MATHPP_USE_STANDARD_ERROR_POLICY
+  IlogbErrPolicyStd<T>;
+#elifdef MATHPP_USE_FAST_ERROR_POLICY
+  IloIlogbErrPolicyFast<T>;
+#endif
+
 /**
  *@brief returns the unbiased exponent value of a floating point number.
  *
  * Error handling for 0s, nans, and infs is delegated by the error policy,
- * by default following the returns values in iec559/IEE754:
+ * by default following the matches the return values in math.h:
  * - 0 returns FP_ILOGB0
  * - NAN returns FP_ILOGNAN
  * - infinity returns INT_MAX  
 */
 template<floating_point T,
-  GeneralErrPolicy<T, int> ErrHandler = ilogbIec559ErrorPolicy<T>
+  GeneralErrPolicy<T, int> ErrHandler = IlogbErrPolicyDefault<T>
 >
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr int 
@@ -91,7 +115,7 @@ ilogb(T x) MATHPP_NOEXCEPT {
  *@brief a more nicely named wrapper for /ref ilogb
 */
 template<floating_point T,
-  GeneralErrPolicy<T, int> ErrHandler = ilogbIec559ErrorPolicy<T>
+  GeneralErrPolicy<T, int> ErrHandler = IlogbErrPolicyDefault<T>
 >
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr int

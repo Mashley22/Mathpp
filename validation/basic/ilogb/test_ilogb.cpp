@@ -13,17 +13,17 @@ namespace {
 
 template<floating_point T>
 constexpr void
-ilogbIec559Errors(void) {
-  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(std::numeric_limits<T>::infinity()) == INT_MAX);
-  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(-std::numeric_limits<T>::infinity()) == INT_MAX);
+ilogbStandardErrors(void) {
+  STATIC_REQUIRE(ilogb<T, IlogbErrPolicyStd<T>>(std::numeric_limits<T>::infinity()) == INT_MAX);
+  STATIC_REQUIRE(ilogb<T, IlogbErrPolicyStd<T>>(-std::numeric_limits<T>::infinity()) == INT_MAX);
 
-  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(std::numeric_limits<T>::quiet_NaN()) == FP_ILOGBNAN);
+  STATIC_REQUIRE(ilogb<T, IlogbErrPolicyStd<T>>(std::numeric_limits<T>::quiet_NaN()) == FP_ILOGBNAN);
 
-  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(std::numeric_limits<T>::signaling_NaN()) == FP_ILOGBNAN);
+  STATIC_REQUIRE(ilogb<T, IlogbErrPolicyStd<T>>(std::numeric_limits<T>::signaling_NaN()) == FP_ILOGBNAN);
 
-  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(0) == FP_ILOGB0);
+  STATIC_REQUIRE(ilogb<T, IlogbErrPolicyStd<T>>(0) == FP_ILOGB0);
 
-  STATIC_REQUIRE(ilogb<T, ilogbIec559ErrorPolicy<T>>(-0) == FP_ILOGB0);
+  STATIC_REQUIRE(ilogb<T, IlogbErrPolicyStd<T>>(-0) == FP_ILOGB0);
 }
 
 TEST_CASE( "ilogb", "[basic][ilogb]" ) {
@@ -42,8 +42,8 @@ TEST_CASE( "ilogb", "[basic][ilogb]" ) {
   }
 
   SECTION( "iec559 error handling" ) {
-    ilogbIec559Errors<float32>();
-    ilogbIec559Errors<float64>();
+    ilogbStandardErrors<float32>();
+    ilogbStandardErrors<float64>();
   }
 
 }
