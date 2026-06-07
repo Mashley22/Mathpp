@@ -69,7 +69,7 @@ TEST_CASE( "floating point ceil", "[trunc][basic]" ) {
     STATIC_REQUIRE(isNearlyEqual(ceil(-1e24_f32), -1e24_f32));
   }
 
-  SECTION( "iec 559 handling" ) {
+  SECTION( "standard handling" ) {
     ceilStandardErrors<float32>();
     ceilStandardErrors<float64>();
   }

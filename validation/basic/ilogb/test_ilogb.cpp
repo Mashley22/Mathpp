@@ -41,7 +41,7 @@ TEST_CASE( "ilogb", "[basic][ilogb]" ) {
     STATIC_REQUIRE(ilogb(2_f32) == 1);
   }
 
-  SECTION( "iec559 error handling" ) {
+  SECTION( "standard error handling" ) {
     ilogbStandardErrors<float32>();
     ilogbStandardErrors<float64>();
   }

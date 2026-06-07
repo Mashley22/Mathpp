@@ -97,7 +97,7 @@ TEST_CASE( "floating point ldexp", "[ldexp][basic]" ) {
     STATIC_REQUIRE(isNearlyEqual(ldexp(1.0_f32, -20), ldexp(1.0_f32, -20)));
   }
 
-  SECTION( "iec559 error handling" ) {
+  SECTION( "standard error handling" ) {
     ldexpStandardErrors<float64>();
     ldexpStandardErrors<float32>();
   }
