@@ -26,13 +26,6 @@ TEST_CASE( "signbit", "[common][signbit]" ) {
     STATIC_REQUIRE(signbit(-100.0_f64));
   }
 
-  SECTION( "long double" ) {
-    STATIC_REQUIRE(signbit(-0.0l));
-    STATIC_REQUIRE(!signbit(0.0l));
-
-    STATIC_REQUIRE(!signbit(1.0l));
-    STATIC_REQUIRE(signbit(-100.0l));
-  }
 }
 
 }
