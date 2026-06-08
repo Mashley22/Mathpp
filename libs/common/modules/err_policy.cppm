@@ -18,7 +18,7 @@ export namespace mathpp {
  *       with the \ref ErrPolicyDoNothing
 */
 template<typename T, typename S, typename T_output = S>
-concept ErrPolicy = Scalar<S> && requires(S val) {
+concept ErrPolicy = requires(S val) {
   { T::requires_check } -> std::convertible_to<bool>;
 
   { T::on_special(val) } -> std::same_as<T_output>;
@@ -29,7 +29,7 @@ concept ErrPolicy = Scalar<S> && requires(S val) {
  *       See \ref GeneralErrPolicySkeleton for a struct to help make this more convenient.
 */
 template<typename T, typename S, typename T_output = S>
-concept GeneralErrPolicy = Scalar<S> && requires {
+concept GeneralErrPolicy = requires {
   typename T::Zero;
   typename T::Nan;
   typename T::Inf;

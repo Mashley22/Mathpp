@@ -4,6 +4,7 @@ module;
 #include <concepts>
 #include <numeric>
 #include <stdfloat>
+#include <math.h>
 
 #include <Mathpp/macros.hpp>
 
@@ -57,6 +58,7 @@ struct iec559_traits<float32> {
   static constexpr uint_type exponent_mask = 0x7F800000U; 
   static constexpr uint_type mantissa_mask = 0x007FFFFFU; 
   
+  static constexpr float32 overflow_val = HUGE_VALF;
 };
 
 template<>
@@ -80,6 +82,7 @@ struct iec559_traits<float64> {
   static constexpr uint_type exponent_mask = 0x7FF0000000000000ULL; 
   static constexpr uint_type mantissa_mask = 0x000FFFFFFFFFFFFFULL; 
   
+  static constexpr float64 overflow_val = HUGE_VAL;
 };
 
 template<floating_point T>
