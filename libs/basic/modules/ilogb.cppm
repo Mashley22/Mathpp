@@ -119,8 +119,17 @@ template<floating_point T,
 >
 [[nodiscard]] MATHPP_CONST_FUNC
 constexpr int
-unbiased_exponent(T x) MATHPP_NOEXCEPT {
+unbiasedExponent(T x) MATHPP_NOEXCEPT {
   return ilogb<T, ErrHandler>(x);
+}
+
+template<floating_point T,
+  GeneralErrPolicy<T, int> ErrHandler = IlogbErrPolicyDefault<T>
+>
+[[nodiscard]] MATHPP_CONST_FUNC
+constexpr T
+logb(T x) MATHPP_NOEXCEPT {
+  return static_cast<T>(ilogb<T, ErrHandler>(x));
 }
 
 }
