@@ -42,7 +42,7 @@ ErrPolicy<typename T::Inf, S, T_output>;
  *@brief Assumes that a special case does not happen and hence can be ignored.
  *       Does NOT debug assert, for that use \ref ErrPolicyDebugAssert
 */
-template<Scalar S, typename T_output = S>
+template<typename S, typename T_output = S>
 struct ErrPolicyDoNothing {
   static constexpr bool requires_check = false;
 
@@ -54,7 +54,7 @@ struct ErrPolicyDoNothing {
 /**
  *@brief Similiar to \ref ErrPolicyDoNothing but adds a debug only assert.
 */
-template<Scalar S, const std::string_view& msg, typename T_output = S>
+template<typename S, const std::string_view& msg, typename T_output = S>
 struct ErrPolicyDebugAssert {
   #ifdef NDEBUG
   static constexpr bool requires_check = false;
@@ -98,7 +98,7 @@ struct GeneralErrPolicySkeleton {
  *@brief An alias to apply the same error policy over all the three common error types in
  *       \ref GeneralErrPolicy
  */
-template<Scalar S, ErrPolicy<S> Policy>
+template<typename S, typename S_output, ErrPolicy<S, S_output> Policy>
 using EqualErrPolicy = GeneralErrPolicySkeleton<S, Policy, Policy, Policy>;
 
 }
