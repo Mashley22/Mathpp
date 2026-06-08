@@ -66,7 +66,7 @@ using IlogbErrPolicyDefault =
 #ifdef MATHPP_USE_STANDARD_ERROR_POLICY
   IlogbErrPolicyStd<T>;
 #elifdef MATHPP_USE_FAST_ERROR_POLICY
-  IloIlogbErrPolicyFast<T>;
+  IlogbErrPolicyFast<T>;
 #endif
 
 /**

@@ -36,7 +36,7 @@ using LdexpErrPolicyDefault =
 #ifdef MATHPP_USE_STANDARD_ERROR_POLICY
   LdexpErrPolicyStd<T>;
 #elifdef MATHPP_USE_FAST_ERROR_POLICY
-  LdLdexpErrPolicyFast<T>;
+  LdexpErrPolicyFast<T>;
 #endif
 
 /**
