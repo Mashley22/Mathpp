@@ -50,7 +50,7 @@ struct iec559_traits<float32> {
   static constexpr int exponent_bias = 127;
   static constexpr int max_exponent = 127;
   static constexpr int raw_exponent_max = 255;
-  static constexpr int subnormal_exponent = -126;
+  static constexpr int min_normal_exponent = -126;
 
   static constexpr float32 epsilon = 0x1p-23;
 
@@ -74,7 +74,7 @@ struct iec559_traits<float64> {
   static constexpr int exponent_bias = 1023;
   static constexpr int max_exponent = 1023;
   static constexpr int raw_exponent_max = 2047;
-  static constexpr int subnormal_exponent = -1022;
+  static constexpr int min_normal_exponent = -1022;
 
   static constexpr float64 epsilon = 0x1p-52;
 

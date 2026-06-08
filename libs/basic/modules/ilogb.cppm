@@ -103,8 +103,8 @@ ilogb(T x) MATHPP_NOEXCEPT {
     bool subnormal = (biasedExp == 0);
     if (subnormal) {
       int leadingZeros = std::countl_zero(mantissa(x)) -
-                         floating_point_traits<T>::total_bits + floating_point_traits<T>::mantissa_bits;
-      return -floating_point_traits<T>::subnormal_exponent - leadingZeros;
+                         floating_point_traits<T>::total_bits + floating_point_traits<T>::mantissa_bits + 1;
+      return floating_point_traits<T>::min_normal_exponent - leadingZeros;
     }
   }
 

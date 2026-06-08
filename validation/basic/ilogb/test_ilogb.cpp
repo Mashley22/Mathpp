@@ -31,12 +31,14 @@ TEST_CASE( "ilogb", "[basic][ilogb]" ) {
   SECTION( "float64" ) {
     STATIC_REQUIRE(ilogb(1e100_f64) == 332);
     STATIC_REQUIRE(ilogb(1e-100_f64) == -333);
+    STATIC_REQUIRE(ilogb(1e-310_f64) == -1030);
     STATIC_REQUIRE(ilogb(1_f64) == 0);
     STATIC_REQUIRE(ilogb(2_f64) == 1);
   }
 
   SECTION( "float32" ) {
     STATIC_REQUIRE(ilogb(1e-20_f32) == -67);
+    STATIC_REQUIRE(ilogb(1e-40_f32) == -133);
     STATIC_REQUIRE(ilogb(1_f32) == 0);
     STATIC_REQUIRE(ilogb(2_f32) == 1);
   }
