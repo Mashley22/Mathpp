@@ -11,7 +11,8 @@ target_sources(Mathpp
       modules/trunc.cppm
       modules/ceil.cppm
       modules/floor.cppm
-      modules/bit.cppm
+      modules/signbit.cppm
+      modules/copysign.cppm
       modules/ilogb.cppm
       modules/ldexp.cppm
       modules/fmod.cppm
