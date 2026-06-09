@@ -69,6 +69,8 @@ struct LdexpErrPolicyStd {
         return params.val;
       }
     };
+
+    static constexpr SubnormalErrPolicy subnormal_policy = SubnormalErrPolicy::STANDARD;
   };
   
   struct Overflow {
@@ -95,12 +97,12 @@ struct LdexpErrPolicyFast {
     T, 
     ErrPolicyDebugAssert<priv::LdexpInfo<T>, zeroErrMsg, T>,
     ErrPolicyDebugAssert<priv::LdexpInfo<T>, nanErrMsg, T>,
-    ErrPolicyDebugAssert<priv::LdexpInfo<T>, infErrMsg, T>
+    ErrPolicyDebugAssert<priv::LdexpInfo<T>, infErrMsg, T>,
+    SubnormalErrPolicy::ASSERT_NOT
   >;
 
   using Overflow = ErrPolicyDebugAssert<priv::LdexpInfo<T>, overflowErrMsg, T>;
   using underflow = ErrPolicyDebugAssert<priv::LdexpInfo<T>, underflowErrMsg, T>;
-
 };
 
 template<floating_point T>

@@ -23,35 +23,37 @@ export namespace mathpp {
 
 template<floating_point T>
 struct IlogbErrPolicyStd {
-struct Zero {
-  static constexpr bool requires_check = true;
-  
-  MATHPP_CONST_FUNC [[nodiscard]] 
-  static constexpr int
-  on_special([[maybe_unused]] T val) MATHPP_NOEXCEPT {
-    return FP_ILOGB0;
-  }
-};
+  struct Zero {
+    static constexpr bool requires_check = true;
+    
+    MATHPP_CONST_FUNC [[nodiscard]] 
+    static constexpr int
+    on_special([[maybe_unused]] T val) MATHPP_NOEXCEPT {
+      return FP_ILOGB0;
+    }
+  };
 
-struct Nan {
-  static constexpr bool requires_check = true;
-  
-  MATHPP_CONST_FUNC [[nodiscard]] 
-  static constexpr int
-  on_special([[maybe_unused]] T val) MATHPP_NOEXCEPT {
-    return FP_ILOGBNAN;
-  }
-};
+  struct Nan {
+    static constexpr bool requires_check = true;
+    
+    MATHPP_CONST_FUNC [[nodiscard]] 
+    static constexpr int
+    on_special([[maybe_unused]] T val) MATHPP_NOEXCEPT {
+      return FP_ILOGBNAN;
+    }
+  };
 
-struct Inf {
-  static constexpr bool requires_check = true;
-  
-  MATHPP_CONST_FUNC [[nodiscard]] 
-  static constexpr int
-  on_special([[maybe_unused]] T val) MATHPP_NOEXCEPT {
-    return INT_MAX;
-  }
-};
+  struct Inf {
+    static constexpr bool requires_check = true;
+    
+    MATHPP_CONST_FUNC [[nodiscard]] 
+    static constexpr int
+    on_special([[maybe_unused]] T val) MATHPP_NOEXCEPT {
+      return INT_MAX;
+    }
+  };
+
+  static constexpr SubnormalErrPolicy subnormal_policy = SubnormalErrPolicy::STANDARD;
 };
 
 template<floating_point T>
@@ -59,6 +61,7 @@ struct IlogbErrPolicyFast {
   using Zero = ErrPolicyDebugAssert<T, zeroErrMsg, int>;
   using Nan = ErrPolicyDebugAssert<T, nanErrMsg, int>;
   using Inf = ErrPolicyDebugAssert<T, infErrMsg, int>;
+  SubnormalErrPolicy subnormal_policy = SubnormalErrPolicy::ASSERT_NOT;
 };
 
 template<floating_point T>
@@ -98,15 +101,18 @@ ilogb(T x) MATHPP_NOEXCEPT {
   }
 
   int biasedExp = biasedExponent(x);
+  [[maybe_unused]] bool subnormal = (biasedExp == 0);
    
-  {
-    bool subnormal = (biasedExp == 0);
+  if constexpr (ErrHandler::subnormal_policy == SubnormalErrPolicy::STANDARD) {
     if (subnormal) {
       int leadingZeros = std::countl_zero(mantissa(x)) -
                          floating_point_traits<T>::total_bits + floating_point_traits<T>::mantissa_bits + 1;
       return floating_point_traits<T>::min_normal_exponent - leadingZeros;
     }
   }
+
+  if constexpr (ErrHandler::subnormal_policy == SubnormalErrPolicy::ASSERT_NOT)
+    MATHPP_CHECK_ASSUME(!subnormal);
 
   return biasedExp - floating_point_traits<T>::exponent_bias;
 }

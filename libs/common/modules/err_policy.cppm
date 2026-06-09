@@ -13,6 +13,12 @@ import :check;
 
 export namespace mathpp {
 
+enum class SubnormalErrPolicy {
+  STANDARD,
+  ASSERT_NOT,
+  NOTHING
+};
+
 /**
  *@brief The error policy concept, the requires check is mostly provided for compatibility
  *       with the \ref ErrPolicyDoNothing
@@ -30,6 +36,7 @@ concept ErrPolicy = requires(S val) {
 */
 template<typename T, typename S, typename T_output = S>
 concept GeneralErrPolicy = requires {
+  { T::subnormal_policy } -> std::convertible_to<SubnormalErrPolicy>;
   typename T::Zero;
   typename T::Nan;
   typename T::Inf;
@@ -86,12 +93,14 @@ struct ErrPolicyPassThrough {
 template<Scalar S,
   ErrPolicy<S> ErrPolicyZero = ErrPolicyPassThrough<S>,
   ErrPolicy<S> ErrPolicyNan = ErrPolicyPassThrough<S>,
-  ErrPolicy<S> ErrPolicyInf = ErrPolicyPassThrough<S>
+  ErrPolicy<S> ErrPolicyInf = ErrPolicyPassThrough<S>,
+  SubnormalErrPolicy subnormalPolicy = SubnormalErrPolicy::STANDARD
 >
 struct GeneralErrPolicySkeleton {
   using Zero = ErrPolicyZero;
   using Nan = ErrPolicyNan;
   using Inf = ErrPolicyInf;
+  static constexpr SubnormalErrPolicy subnormal_policy = subnormalPolicy;
 };
 
 /**
