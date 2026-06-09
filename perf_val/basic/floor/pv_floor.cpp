@@ -74,9 +74,8 @@ runValidations(void) {
 }
 
 TEST_CASE( "floor", "[basic][floor]" ) {
-  runValidations<double>();
-  runValidations<float>();
-  runValidations<long double>();
+  runValidations<mathpp::float32>();
+  runValidations<mathpp::float64>();
 }
 
 #else

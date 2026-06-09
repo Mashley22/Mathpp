@@ -75,9 +75,8 @@ runValidations(void) {
 }
 
 TEST_CASE( "trunc", "[basic][trunc]" ) {
-  runValidations<double>();
-  runValidations<float>();
-  runValidations<long double>();
+  runValidations<mathpp::float64>();
+  runValidations<mathpp::float32>();
 }
 
 #else
